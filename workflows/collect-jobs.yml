@@ -1,0 +1,86 @@
+name: Daily Job Collection
+
+on:
+  schedule:
+    # Run every day at 6 AM UTC (1 AM EST)
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  collect-jobs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx
+      
+      - name: Run job collector
+        run: |
+          cd collectors
+          python live_collector.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      
+      - name: Upload jobs to Supabase (if configured)
+        if: env.SUPABASE_URL != ''
+        run: |
+          python -c "
+          import json
+          import httpx
+          import os
+          
+          with open('collectors/collected_jobs.json', 'r') as f:
+              data = json.load(f)
+          
+          jobs = data.get('jobs', [])
+          print(f'Uploading {len(jobs)} jobs to Supabase...')
+          
+          url = os.environ['SUPABASE_URL']
+          key = os.environ['SUPABASE_KEY']
+          
+          # Upload in batches
+          for i in range(0, len(jobs), 100):
+              batch = jobs[i:i+100]
+              resp = httpx.post(
+                  f'{url}/rest/v1/jobs',
+                  headers={
+                      'apikey': key,
+                      'Authorization': f'Bearer {key}',
+                      'Content-Type': 'application/json',
+                      'Prefer': 'resolution=merge-duplicates'
+                  },
+                  json=batch,
+                  timeout=60.0
+              )
+              print(f'Batch {i//100 + 1}: {resp.status_code}')
+          "
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      
+      - name: Trigger API refresh
+        if: env.API_URL != ''
+        run: |
+          curl -X POST "${{ secrets.API_URL }}/api/collect" || true
+        env:
+          API_URL: ${{ secrets.API_URL }}
+      
+      - name: Commit updated jobs (if no Supabase)
+        if: env.SUPABASE_URL == ''
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add collectors/collected_jobs.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update jobs - $(date +'%Y-%m-%d')"
+          git push
