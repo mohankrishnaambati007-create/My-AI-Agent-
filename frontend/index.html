@@ -3,515 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY AI AGENT | OPT-Friendly Job Discovery</title>
-    <meta name="description" content="AI-powered job discovery platform for F-1 OPT students. Find H-1B sponsor companies and visa-friendly positions.">
+    <title>MY AI AGENT | Job Discovery for All Majors</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Syne:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --void: #000000;
-            --cosmos: #0a0a0f;
-            --nebula: #12121a;
-            --stardust: #1a1a24;
-            --aurora-1: #00f5d4;
-            --aurora-2: #00bbf9;
-            --aurora-3: #9b5de5;
-            --aurora-4: #f15bb5;
-            --aurora-5: #fee440;
-            --ghost: rgba(255,255,255,0.03);
-            --whisper: rgba(255,255,255,0.06);
-            --fog: rgba(255,255,255,0.24);
-            --cloud: rgba(255,255,255,0.48);
-            --pure: #ffffff;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Outfit', sans-serif; background: var(--void); color: var(--pure); min-height: 100vh; }
-        
-        .universe {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(ellipse at 20% 80%, rgba(0,245,212,0.1) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(155,93,229,0.1) 0%, transparent 50%);
-        }
-        
-        /* Header */
-        header {
-            position: fixed; top: 0; left: 0; right: 0; height: 60px;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 16px; border-bottom: 1px solid var(--ghost); z-index: 100;
-        }
-        .logo { display: flex; align-items: center; gap: 10px; }
-        .logo-icon {
-            width: 32px; height: 32px; border: 2px solid var(--aurora-1);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            animation: spin 10s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .logo-icon::after { content: ''; width: 12px; height: 12px; background: linear-gradient(135deg, var(--aurora-1), var(--aurora-3)); border-radius: 3px; transform: rotate(45deg); }
-        .logo-text { font-family: 'Syne'; font-size: 1.1rem; font-weight: 800; }
-        
-        .stats-bar { display: flex; gap: 12px; font-family: 'Space Mono'; font-size: 0.65rem; color: var(--fog); }
-        .stat { display: flex; align-items: center; gap: 4px; }
-        .stat-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--aurora-1); }
-        .stat-value { color: var(--pure); font-weight: 700; }
-        
-        .menu-btn {
-            display: none; background: none; border: none; color: var(--pure);
-            font-size: 1.5rem; cursor: pointer; padding: 8px;
-        }
-        
-        /* Main Layout */
-        main { margin-top: 60px; display: flex; min-height: calc(100vh - 60px); }
-        
-        /* Sidebar */
-        .sidebar {
-            width: 280px; background: var(--cosmos); border-right: 1px solid var(--ghost);
-            padding: 20px; overflow-y: auto; flex-shrink: 0;
-            position: fixed; top: 60px; left: 0; bottom: 0; z-index: 50;
-            transition: transform 0.3s ease;
-        }
-        
-        .section-title { 
-            font-family: 'Space Mono'; font-size: 0.6rem; letter-spacing: 0.15em; 
-            text-transform: uppercase; color: var(--fog); margin-bottom: 10px; margin-top: 16px; 
-        }
-        .section-title:first-child { margin-top: 0; }
-        
-        .search-box {
-            width: 100%; padding: 10px 14px; background: var(--ghost);
-            border: 1px solid var(--whisper); border-radius: 10px;
-            color: var(--pure); font-family: 'Outfit'; font-size: 0.85rem; outline: none;
-        }
-        .search-box:focus { border-color: var(--aurora-1); }
-        
-        .filters { display: flex; flex-wrap: wrap; gap: 6px; }
-        .filter-btn {
-            padding: 6px 12px; background: var(--ghost); border: 1px solid var(--whisper);
-            border-radius: 50px; color: var(--cloud); font-size: 0.75rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .filter-btn:hover { background: var(--whisper); }
-        .filter-btn.active { background: var(--aurora-1); color: var(--void); border-color: transparent; }
-        
-        .category-list { display: flex; flex-direction: column; gap: 3px; }
-        .category-btn {
-            display: flex; align-items: center; gap: 8px; padding: 10px 12px;
-            background: transparent; border: none; border-radius: 8px;
-            color: var(--cloud); font-family: 'Outfit'; font-size: 0.85rem;
-            cursor: pointer; transition: all 0.2s; text-align: left;
-        }
-        .category-btn:hover { background: var(--ghost); }
-        .category-btn.active { background: var(--aurora-1); color: var(--void); }
-        .category-count { margin-left: auto; font-size: 0.7rem; opacity: 0.6; }
-        
-        .visa-panel {
-            background: linear-gradient(145deg, var(--nebula), var(--cosmos));
-            border: 1px solid var(--whisper); border-radius: 12px; padding: 14px; margin-top: 16px;
-        }
-        .visa-title { font-family: 'Syne'; font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-        .visa-sub { font-size: 0.7rem; color: var(--fog); margin-bottom: 12px; }
-        
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--ghost); }
-        .toggle-row:last-child { border: none; }
-        .toggle-label { font-size: 0.8rem; color: var(--cloud); }
-        .toggle {
-            width: 40px; height: 22px; background: var(--stardust); border-radius: 11px;
-            position: relative; cursor: pointer; transition: all 0.3s;
-        }
-        .toggle::after {
-            content: ''; position: absolute; top: 2px; left: 2px;
-            width: 18px; height: 18px; background: var(--fog); border-radius: 50%; transition: all 0.3s;
-        }
-        .toggle.on { background: var(--aurora-1); }
-        .toggle.on::after { left: 20px; background: var(--void); }
-        
-        /* Content */
-        .content { flex: 1; padding: 20px; margin-left: 280px; overflow-y: auto; }
-        .content-header { margin-bottom: 20px; }
-        .content-title { font-family: 'Syne'; font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
-        .content-sub { color: var(--fog); font-size: 0.85rem; }
-        .content-sub span { color: var(--aurora-1); font-weight: 600; }
-        
-        /* Job Grid */
-        .job-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-        
-        .job-card {
-            background: linear-gradient(145deg, var(--nebula), var(--cosmos));
-            border: 1px solid var(--whisper); border-radius: 14px; padding: 18px;
-            transition: all 0.3s; cursor: pointer; position: relative;
-        }
-        .job-card:hover { transform: translateY(-3px); border-color: var(--aurora-1); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
-        
-        .job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .company-info { display: flex; gap: 10px; align-items: center; }
-        .company-logo {
-            width: 40px; height: 40px; border-radius: 8px;
-            background: linear-gradient(135deg, var(--aurora-1), var(--aurora-2));
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.8rem; color: var(--void);
-        }
-        .company-name { font-weight: 600; font-size: 0.9rem; }
-        .company-industry { font-size: 0.7rem; color: var(--fog); }
-        
-        .opt-ring { width: 44px; height: 44px; position: relative; }
-        .opt-ring svg { transform: rotate(-90deg); }
-        .opt-ring circle { fill: none; stroke-width: 4; }
-        .opt-ring .bg { stroke: var(--stardust); }
-        .opt-ring .progress { stroke: var(--aurora-1); stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
-        .opt-ring .value {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-family: 'Space Mono'; font-size: 0.7rem; font-weight: 700;
-        }
-        
-        .job-title { font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
-        .job-meta { display: flex; gap: 12px; font-size: 0.75rem; color: var(--fog); margin-bottom: 12px; flex-wrap: wrap; }
-        
-        .skills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
-        .skill { padding: 3px 8px; background: var(--ghost); border-radius: 5px; font-size: 0.7rem; color: var(--cloud); }
-        .skill.hl { background: rgba(0,245,212,0.15); color: var(--aurora-1); }
-        
-        .job-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--ghost); }
-        .salary { font-family: 'Space Mono'; font-size: 0.8rem; color: var(--aurora-1); font-weight: 700; }
-        .posted { font-size: 0.7rem; color: var(--fog); }
-        .posted.fresh { color: var(--aurora-1); }
-        
-        .badges { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-        .badge { padding: 4px 8px; border-radius: 5px; font-size: 0.65rem; font-weight: 600; }
-        .badge.h1b { background: rgba(0,245,212,0.15); color: var(--aurora-1); }
-        .badge.opt { background: rgba(254,228,64,0.15); color: var(--aurora-5); }
-        
-        .loading { text-align: center; padding: 40px; color: var(--fog); }
-        .spinner { width: 36px; height: 36px; border: 3px solid var(--ghost); border-top-color: var(--aurora-1); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
-        
-        /* Mobile Overlay */
-        .sidebar-overlay {
-            display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7); z-index: 40;
-        }
-        
-        /* ============ MOBILE STYLES ============ */
-        @media (max-width: 768px) {
-            .menu-btn { display: block; }
-            .stats-bar { display: none; }
-            
-            .sidebar {
-                transform: translateX(-100%);
-                width: 85%;
-                max-width: 320px;
-            }
-            .sidebar.open { transform: translateX(0); }
-            .sidebar-overlay.open { display: block; }
-            
-            .content { margin-left: 0; padding: 16px; }
-            .content-title { font-size: 1.5rem; }
-            
-            .job-grid { grid-template-columns: 1fr; gap: 12px; }
-            .job-card { padding: 14px; }
-            .job-title { font-size: 0.95rem; }
-            
-            header { padding: 0 12px; }
-            .logo-text { font-size: 1rem; }
-        }
-        
-        @media (max-width: 480px) {
-            .content { padding: 12px; }
-            .content-title { font-size: 1.3rem; }
-            .job-card { padding: 12px; }
-            .company-logo { width: 36px; height: 36px; font-size: 0.7rem; }
-            .opt-ring { width: 40px; height: 40px; }
-            .job-meta { gap: 8px; }
-        }
+        :root{--void:#000;--cosmos:#0a0a0f;--nebula:#12121a;--aurora-1:#00f5d4;--aurora-2:#00bbf9;--aurora-3:#9b5de5;--aurora-4:#f15bb5;--aurora-5:#fee440;--ghost:rgba(255,255,255,0.03);--whisper:rgba(255,255,255,0.06);--fog:rgba(255,255,255,0.24);--cloud:rgba(255,255,255,0.48);--pure:#fff}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--void);color:var(--pure);min-height:100vh}
+        header{position:fixed;top:0;left:0;right:0;height:54px;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--ghost);z-index:100}
+        .logo{display:flex;align-items:center;gap:8px}.logo-text{font-family:'Syne';font-size:1rem;font-weight:700}
+        .stats{display:flex;gap:10px;font-size:0.6rem;color:var(--fog)}.stat-val{color:var(--pure);font-weight:700}
+        .menu-btn{display:none;background:none;border:none;color:var(--pure);font-size:1.3rem;cursor:pointer}
+        main{margin-top:54px;display:flex}
+        .sidebar{width:280px;background:var(--cosmos);padding:12px;overflow-y:auto;position:fixed;top:54px;left:0;bottom:0;z-index:50;transition:transform 0.3s}
+        .stitle{font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fog);margin:10px 0 6px}
+        .stitle:first-child{margin-top:0}
+        .search,.select{width:100%;padding:8px 10px;background:var(--ghost);border:1px solid var(--whisper);border-radius:6px;color:var(--pure);font-size:0.8rem;outline:none}
+        .search:focus,.select:focus{border-color:var(--aurora-1)}
+        .select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+        .filters{display:flex;flex-wrap:wrap;gap:4px}
+        .fbtn{padding:4px 9px;background:var(--ghost);border:1px solid var(--whisper);border-radius:20px;color:var(--cloud);font-size:0.68rem;cursor:pointer}
+        .fbtn:hover{background:var(--whisper)}.fbtn.active{background:var(--aurora-1);color:var(--void);border-color:transparent}
+        .vpanel{background:var(--nebula);border:1px solid var(--whisper);border-radius:8px;padding:10px;margin-top:10px}
+        .vtitle{font-weight:700;font-size:0.78rem;margin-bottom:8px}
+        .trow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--ghost);font-size:0.7rem;color:var(--cloud)}
+        .trow:last-child{border:none}
+        .toggle{width:34px;height:17px;background:#1a1a24;border-radius:9px;position:relative;cursor:pointer}
+        .toggle::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--fog);border-radius:50%;transition:0.2s}
+        .toggle.on{background:var(--aurora-1)}.toggle.on::after{left:19px;background:var(--void)}
+        .clrbtn{width:100%;padding:7px;margin-top:10px;background:transparent;border:1px solid var(--aurora-4);border-radius:5px;color:var(--aurora-4);font-size:0.72rem;cursor:pointer}
+        .clrbtn:hover{background:var(--aurora-4);color:var(--void)}
+        .content{flex:1;padding:14px;margin-left:280px}
+        .cheader{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+        .ctitle{font-family:'Syne';font-size:1.4rem;font-weight:700}
+        .csub{color:var(--fog);font-size:0.78rem}.csub span{color:var(--aurora-1)}
+        .sortsel{padding:6px 8px;background:var(--ghost);border:1px solid var(--whisper);border-radius:5px;color:var(--pure);font-size:0.72rem}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+        .card{background:linear-gradient(145deg,var(--nebula),var(--cosmos));border:1px solid var(--whisper);border-radius:10px;padding:12px;cursor:pointer;transition:0.2s}
+        .card:hover{transform:translateY(-2px);border-color:var(--aurora-1)}
+        .cardh{display:flex;justify-content:space-between;margin-bottom:8px}
+        .clogo{width:34px;height:34px;border-radius:6px;background:linear-gradient(135deg,var(--aurora-1),var(--aurora-2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.65rem;color:var(--void)}
+        .cname{font-weight:600;font-size:0.78rem}.cind{font-size:0.62rem;color:var(--fog)}
+        .opt{width:36px;height:36px;position:relative}.opt svg{transform:rotate(-90deg)}.opt circle{fill:none;stroke-width:3}.opt .bg{stroke:#1a1a24}.opt .prog{stroke:var(--aurora-1);stroke-linecap:round}
+        .opt .val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.58rem;font-weight:700}
+        .jtitle{font-size:0.85rem;font-weight:600;margin-bottom:6px;line-height:1.2}
+        .jmeta{display:flex;gap:8px;font-size:0.65rem;color:var(--fog);margin-bottom:6px;flex-wrap:wrap}
+        .skills{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+        .skill{padding:2px 6px;background:var(--ghost);border-radius:3px;font-size:0.6rem;color:var(--cloud)}
+        .skill.hl{background:rgba(0,245,212,0.15);color:var(--aurora-1)}
+        .jfoot{display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid var(--ghost);font-size:0.68rem}
+        .sal{color:var(--aurora-1);font-weight:700}.posted{color:var(--fog)}.posted.fresh{color:var(--aurora-1)}
+        .badges{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap}
+        .badge{padding:2px 5px;border-radius:3px;font-size:0.55rem;font-weight:600}
+        .badge.h1b{background:rgba(0,245,212,0.15);color:var(--aurora-1)}
+        .badge.opt{background:rgba(254,228,64,0.15);color:var(--aurora-5)}
+        .badge.rem{background:rgba(155,93,229,0.15);color:var(--aurora-3)}
+        .loading{text-align:center;padding:30px;color:var(--fog)}
+        .spinner{width:28px;height:28px;border:3px solid var(--ghost);border-top-color:var(--aurora-1);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 8px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .loadmore{width:100%;padding:10px;margin-top:14px;background:var(--ghost);border:1px solid var(--whisper);border-radius:6px;color:var(--pure);font-size:0.8rem;cursor:pointer}
+        .loadmore:hover{background:var(--aurora-1);color:var(--void)}
+        .overlay{display:none;position:fixed;top:54px;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:40}
+        @media(max-width:800px){.menu-btn{display:block}.stats{display:none}.sidebar{transform:translateX(-100%);width:85%}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.content{margin-left:0}.grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-    <div class="universe"></div>
-    
-    <header>
-        <div class="logo">
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-            <div class="logo-icon"></div>
-            <div class="logo-text">MY AI AGENT</div>
-        </div>
-        <div class="stats-bar">
-            <div class="stat"><div class="stat-dot"></div>COMPANIES <span class="stat-value" id="companyCount">0</span></div>
-            <div class="stat"><div class="stat-dot" style="background:var(--aurora-5)"></div>H1B <span class="stat-value" id="h1bCount">0</span></div>
-            <div class="stat"><div class="stat-dot" style="background:var(--aurora-4)"></div>JOBS <span class="stat-value" id="jobCount">0</span></div>
-        </div>
-    </header>
-
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-    <main>
-        <aside class="sidebar" id="sidebar">
-            <div class="section-title">Search</div>
-            <input type="text" class="search-box" id="searchInput" placeholder="Search roles, skills, companies...">
-            
-            <div class="section-title">⏰ Posted Within</div>
-            <div class="filters">
-                <button class="filter-btn time-btn active" data-hours="0">All Time</button>
-                <button class="filter-btn time-btn" data-hours="24">24h</button>
-                <button class="filter-btn time-btn" data-hours="48">48h</button>
-                <button class="filter-btn time-btn" data-hours="168">7 Days</button>
-            </div>
-            
-            <div class="section-title">Work Type</div>
-            <div class="filters">
-                <button class="filter-btn work-btn active" data-type="all">All</button>
-                <button class="filter-btn work-btn" data-type="remote">Remote</button>
-                <button class="filter-btn work-btn" data-type="hybrid">Hybrid</button>
-                <button class="filter-btn work-btn" data-type="onsite">On-site</button>
-            </div>
-            
-            <div class="section-title">Categories</div>
-            <div class="category-list">
-                <button class="category-btn active" data-category="all">🔒 All Jobs <span class="category-count" id="catAll">0</span></button>
-                <button class="category-btn" data-category="cybersecurity">🛡️ Cybersecurity <span class="category-count" id="catCyber">0</span></button>
-                <button class="category-btn" data-category="cloud">☁️ Cloud <span class="category-count" id="catCloud">0</span></button>
-                <button class="category-btn" data-category="networking">🌐 Networking <span class="category-count" id="catNet">0</span></button>
-                <button class="category-btn" data-category="business_analyst">📊 Business Analyst <span class="category-count" id="catBA">0</span></button>
-            </div>
-            
-            <div class="visa-panel">
-                <div class="visa-title">🎫 Visa Intelligence</div>
-                <div class="visa-sub">OPT-Optimized Filtering</div>
-                <div class="toggle-row">
-                    <span class="toggle-label">Hide Citizenship Required</span>
-                    <div class="toggle on" id="toggleCitizen"></div>
-                </div>
-                <div class="toggle-row">
-                    <span class="toggle-label">H-1B Sponsors Only</span>
-                    <div class="toggle" id="toggleH1b"></div>
-                </div>
-                <div class="toggle-row">
-                    <span class="toggle-label">No Clearance Jobs</span>
-                    <div class="toggle on" id="toggleClearance"></div>
-                </div>
-            </div>
-        </aside>
-
-        <section class="content">
-            <div class="content-header">
-                <h1 class="content-title">Discover Jobs</h1>
-                <p class="content-sub">Showing <span id="showingCount">0</span> OPT-friendly positions</p>
-            </div>
-            <div class="job-grid" id="jobGrid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div>Loading jobs...</div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // ========== CONFIGURATION ==========
-        const API_BASE = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000'
-            : 'https://my-ai-agent-5eoe.onrender.com';
-        
-        let allJobs = [];
-        let filters = {
-            category: 'all',
-            h1bOnly: false,
-            hideCitizenship: true,
-            hideClearance: true,
-            search: '',
-            hoursAgo: 0,
-            workType: 'all'
-        };
-
-        // Mobile sidebar toggle
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.querySelector('.sidebar-overlay').classList.toggle('open');
-        }
-
-        // Close sidebar when clicking a filter on mobile
-        function closeSidebarOnMobile() {
-            if (window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.remove('open');
-                document.querySelector('.sidebar-overlay').classList.remove('open');
-            }
-        }
-
-        // Time ago formatter
-        function timeAgo(date) {
-            const now = new Date();
-            const posted = new Date(date);
-            const hours = Math.floor((now - posted) / 3600000);
-            if (hours < 1) return 'Just now';
-            if (hours < 24) return hours + ' hours ago';
-            const days = Math.floor(hours / 24);
-            if (days < 30) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
-            return Math.floor(days / 30) + ' month' + (Math.floor(days / 30) > 1 ? 's' : '') + ' ago';
-        }
-
-        // OPT Score Ring SVG
-        function optRing(score) {
-            const circumference = 2 * Math.PI * 16;
-            const offset = circumference - (score / 100) * circumference;
-            const color = score >= 70 ? 'var(--aurora-1)' : score >= 50 ? 'var(--aurora-5)' : 'var(--aurora-4)';
-            return '<div class="opt-ring"><svg width="44" height="44"><circle class="bg" cx="22" cy="22" r="16"/><circle class="progress" cx="22" cy="22" r="16" stroke="' + color + '" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '"/></svg><div class="value" style="color:' + color + '">' + score + '</div></div>';
-        }
-
-        // Render job card
-        function renderJobCard(job) {
-            const hours = (new Date() - new Date(job.posted_date)) / 3600000;
-            const isFresh = hours < 24;
-            const skillsHtml = (job.skills || []).slice(0, 4).map(function(s, i) {
-                return '<span class="skill ' + (i < 2 ? 'hl' : '') + '">' + s + '</span>';
-            }).join('');
-            
-            return '<article class="job-card" onclick="window.open(\'' + job.apply_url + '\', \'_blank\')">' +
-                '<div class="job-header">' +
-                    '<div class="company-info">' +
-                        '<div class="company-logo">' + job.company.substring(0, 2).toUpperCase() + '</div>' +
-                        '<div><div class="company-name">' + job.company + '</div>' +
-                        '<div class="company-industry">' + (job.industry || '') + '</div></div>' +
-                    '</div>' +
-                    optRing(job.opt_score || 50) +
-                '</div>' +
-                '<h3 class="job-title">' + job.title + '</h3>' +
-                '<div class="job-meta">' +
-                    '<span>📍 ' + job.location + '</span>' +
-                    '<span>💼 ' + (job.work_type || 'Full-time') + '</span>' +
-                '</div>' +
-                '<div class="skills">' + skillsHtml + '</div>' +
-                '<div class="job-footer">' +
-                    '<span class="salary">' + (job.salary_display || 'Competitive') + '</span>' +
-                    '<span class="posted ' + (isFresh ? 'fresh' : '') + '">' + (isFresh ? '● ' : '') + timeAgo(job.posted_date) + '</span>' +
-                '</div>' +
-                '<div class="badges">' +
-                    (job.h1b_sponsor_history ? '<span class="badge h1b">● H-1B Sponsor</span>' : '') +
-                    ((job.opt_score || 0) >= 70 ? '<span class="badge opt">● OPT Friendly</span>' : '') +
-                '</div>' +
-            '</article>';
-        }
-
-        // Filter and render jobs
-        function renderJobs() {
-            var filtered = allJobs.slice();
-            
-            if (filters.hoursAgo > 0) {
-                var cutoff = new Date(Date.now() - filters.hoursAgo * 60 * 60 * 1000);
-                filtered = filtered.filter(function(j) { return new Date(j.posted_date) >= cutoff; });
-            }
-            if (filters.workType !== 'all') {
-                filtered = filtered.filter(function(j) { return j.work_type && j.work_type.toLowerCase() === filters.workType; });
-            }
-            if (filters.category !== 'all') {
-                filtered = filtered.filter(function(j) { return j.categories && j.categories.indexOf(filters.category) !== -1; });
-            }
-            if (filters.h1bOnly) {
-                filtered = filtered.filter(function(j) { return j.h1b_sponsor_history; });
-            }
-            if (filters.hideCitizenship) {
-                filtered = filtered.filter(function(j) { return !j.citizenship_required; });
-            }
-            if (filters.hideClearance) {
-                filtered = filtered.filter(function(j) { return !j.clearance_required; });
-            }
-            if (filters.search) {
-                var q = filters.search.toLowerCase();
-                filtered = filtered.filter(function(j) {
-                    return j.title.toLowerCase().indexOf(q) !== -1 ||
-                           j.company.toLowerCase().indexOf(q) !== -1 ||
-                           (j.skills && j.skills.some(function(s) { return s.toLowerCase().indexOf(q) !== -1; }));
-                });
-            }
-            
-            document.getElementById('showingCount').textContent = filtered.length;
-            document.getElementById('jobGrid').innerHTML = filtered.length 
-                ? filtered.map(renderJobCard).join('')
-                : '<div class="loading">No jobs match your filters. Try expanding your filters.</div>';
-        }
-
-        // Update category counts
-        function updateCounts() {
-            document.getElementById('catAll').textContent = allJobs.length;
-            document.getElementById('catCyber').textContent = allJobs.filter(function(j) { return j.categories && j.categories.indexOf('cybersecurity') !== -1; }).length;
-            document.getElementById('catCloud').textContent = allJobs.filter(function(j) { return j.categories && j.categories.indexOf('cloud') !== -1; }).length;
-            document.getElementById('catNet').textContent = allJobs.filter(function(j) { return j.categories && j.categories.indexOf('networking') !== -1; }).length;
-            document.getElementById('catBA').textContent = allJobs.filter(function(j) { return j.categories && j.categories.indexOf('business_analyst') !== -1; }).length;
-        }
-
-        // Fetch jobs from API
-        function fetchJobs() {
-            fetch(API_BASE + '/api/jobs?page_size=500')
-                .then(function(resp) { return resp.json(); })
-                .then(function(data) {
-                    allJobs = data.jobs || [];
-                    document.getElementById('jobCount').textContent = data.total || allJobs.length;
-                    updateCounts();
-                    renderJobs();
-                })
-                .catch(function(err) {
-                    console.error('API Error:', err);
-                    document.getElementById('jobGrid').innerHTML = '<div class="loading"><p>⚠️ Could not connect to API</p><p style="font-size:0.8rem;margin-top:8px;">Backend may be starting up. Refresh in 30 seconds.</p></div>';
-                });
-        }
-
-        // Fetch stats
-        function fetchStats() {
-            fetch(API_BASE + '/api/stats')
-                .then(function(resp) { return resp.json(); })
-                .then(function(data) {
-                    document.getElementById('companyCount').textContent = data.total_companies || 0;
-                    document.getElementById('h1bCount').textContent = data.h1b_sponsors || 0;
-                })
-                .catch(function(err) { console.error('Stats Error:', err); });
-        }
-
-        // Event listeners
-        document.querySelectorAll('.category-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.category-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                filters.category = btn.dataset.category;
-                renderJobs();
-                closeSidebarOnMobile();
-            });
-        });
-
-        document.querySelectorAll('.time-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.time-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                filters.hoursAgo = parseInt(btn.dataset.hours);
-                renderJobs();
-                closeSidebarOnMobile();
-            });
-        });
-
-        document.querySelectorAll('.work-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.work-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                filters.workType = btn.dataset.type;
-                renderJobs();
-                closeSidebarOnMobile();
-            });
-        });
-
-        document.querySelectorAll('.toggle').forEach(function(toggle) {
-            toggle.addEventListener('click', function() {
-                toggle.classList.toggle('on');
-                if (toggle.id === 'toggleH1b') filters.h1bOnly = toggle.classList.contains('on');
-                if (toggle.id === 'toggleCitizen') filters.hideCitizenship = toggle.classList.contains('on');
-                if (toggle.id === 'toggleClearance') filters.hideClearance = toggle.classList.contains('on');
-                renderJobs();
-            });
-        });
-
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            filters.search = e.target.value;
-            renderJobs();
-        });
-
-        // Initialize
-        fetchJobs();
-        fetchStats();
-        setInterval(fetchJobs, 300000);
-    </script>
+<header>
+    <div class="logo"><button class="menu-btn" onclick="toggleSidebar()">☰</button><span class="logo-text">🚀 MY AI AGENT</span></div>
+    <div class="stats"><span>COMPANIES <span class="stat-val" id="compC">0</span></span><span>H1B <span class="stat-val" id="h1bC">0</span></span><span>JOBS <span class="stat-val" id="jobC">0</span></span></div>
+</header>
+<div class="overlay" onclick="toggleSidebar()"></div>
+<main>
+<aside class="sidebar" id="sidebar">
+    <div class="stitle">🔍 SEARCH</div>
+    <input class="search" id="search" placeholder="Job, company, skills...">
+    <div class="stitle">🌍 COUNTRY</div>
+    <select class="select" id="country">
+        <option value="all">🌐 All Countries</option>
+        <option value="united states">🇺🇸 United States</option>
+        <option value="remote">🏠 Remote Only</option>
+        <option value="canada">🇨🇦 Canada</option>
+        <option value="united kingdom">🇬🇧 UK</option>
+        <option value="germany">🇩🇪 Germany</option>
+        <option value="india">🇮🇳 India</option>
+        <option value="australia">🇦🇺 Australia</option>
+        <option value="singapore">🇸🇬 Singapore</option>
+        <option value="japan">🇯🇵 Japan</option>
+        <option value="france">🇫🇷 France</option>
+        <option value="netherlands">🇳🇱 Netherlands</option>
+        <option value="ireland">🇮🇪 Ireland</option>
+    </select>
+    <div class="stitle">🎓 FIELD / MAJOR</div>
+    <select class="select" id="major">
+        <option value="all">📚 All Fields</option>
+        <option value="software">💻 Software Engineering</option>
+        <option value="data">📊 Data Science / AI / ML</option>
+        <option value="cybersecurity">🛡️ Cybersecurity</option>
+        <option value="cloud">☁️ Cloud / DevOps</option>
+        <option value="networking">🌐 Networking / IT</option>
+        <option value="product">📦 Product Management</option>
+        <option value="design">🎨 Design / UX</option>
+        <option value="business">📈 Business / Operations</option>
+        <option value="finance">💰 Finance / Accounting</option>
+        <option value="marketing">📢 Marketing / Sales</option>
+        <option value="hr">👥 HR / Recruiting</option>
+        <option value="legal">⚖️ Legal</option>
+        <option value="healthcare">🏥 Healthcare</option>
+        <option value="engineering">⚙️ Mech/Electrical Eng</option>
+        <option value="support">🎧 Customer Support</option>
+    </select>
+    <div class="stitle">⏰ POSTED</div>
+    <div class="filters"><button class="fbtn time active" data-h="0">All</button><button class="fbtn time" data-h="24">24h</button><button class="fbtn time" data-h="48">48h</button><button class="fbtn time" data-h="168">7d</button><button class="fbtn time" data-h="720">30d</button></div>
+    <div class="stitle">💼 WORK TYPE</div>
+    <div class="filters"><button class="fbtn work active" data-w="all">All</button><button class="fbtn work" data-w="remote">Remote</button><button class="fbtn work" data-w="hybrid">Hybrid</button><button class="fbtn work" data-w="onsite">Onsite</button></div>
+    <div class="stitle">📋 JOB TYPE</div>
+    <div class="filters"><button class="fbtn jtype active" data-j="all">All</button><button class="fbtn jtype" data-j="fulltime">Full-time</button><button class="fbtn jtype" data-j="intern">Intern</button><button class="fbtn jtype" data-j="contract">Contract</button></div>
+    <div class="stitle">📊 EXPERIENCE</div>
+    <div class="filters"><button class="fbtn exp active" data-e="all">All</button><button class="fbtn exp" data-e="entry">Entry</button><button class="fbtn exp" data-e="mid">Mid</button><button class="fbtn exp" data-e="senior">Senior</button><button class="fbtn exp" data-e="lead">Lead+</button></div>
+    <div class="vpanel">
+        <div class="vtitle">🎫 Visa Filters</div>
+        <div class="trow"><span>Hide Citizenship Req</span><div class="toggle on" id="tCit"></div></div>
+        <div class="trow"><span>H-1B Sponsors Only</span><div class="toggle" id="tH1b"></div></div>
+        <div class="trow"><span>No Clearance</span><div class="toggle on" id="tClr"></div></div>
+        <div class="trow"><span>Hide Duplicates</span><div class="toggle" id="tDup"></div></div>
+    </div>
+    <button class="clrbtn" onclick="clearAll()">🗑️ Clear Filters</button>
+</aside>
+<section class="content">
+    <div class="cheader"><div><h1 class="ctitle">Discover Jobs</h1><p class="csub">Showing <span id="showC">0</span> of <span id="totC">0</span></p></div>
+    <select class="sortsel" id="sortS"><option value="score">OPT Score</option><option value="recent">Recent</option><option value="company">Company</option></select></div>
+    <div class="grid" id="grid"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+    <button class="loadmore" id="loadmore" style="display:none" onclick="loadMore()">Load More</button>
+</section>
+</main>
+<script>
+const API=location.hostname==='localhost'?'http://localhost:8000':'https://my-ai-agent-5eoe.onrender.com';
+let jobs=[],shown=0,PAGE=50;
+let F={q:'',country:'all',major:'all',hours:0,work:'all',jtype:'all',exp:'all',h1b:false,hideCit:true,hideClr:true,hideDup:false};
+const MKW={software:['software','developer','engineer','fullstack','frontend','backend','java','python','javascript','react','node','mobile','ios','android','golang'],data:['data','analytics','machine learning','ml','ai','scientist','analyst','bi','sql','statistics','deep learning'],cybersecurity:['security','cyber','infosec','soc','penetration','vulnerability','threat','compliance'],cloud:['cloud','aws','azure','gcp','devops','kubernetes','docker','terraform','sre'],networking:['network','cisco','routing','switching','firewall','vpn','administrator','sysadmin'],product:['product manager','product owner','roadmap'],design:['design','ux','ui','figma','sketch','adobe','creative'],business:['business analyst','operations','project manager','program manager','scrum','agile'],finance:['finance','accounting','financial','cpa','audit','tax','investment','banking'],marketing:['marketing','sales','growth','seo','content','social media','brand','account executive'],hr:['human resources','hr','recruiting','recruiter','talent'],legal:['legal','lawyer','compliance','contract','counsel'],healthcare:['healthcare','medical','clinical','biotech','pharmaceutical'],engineering:['mechanical','electrical','hardware','civil','manufacturing','cad'],support:['support','customer success','help desk']};
+const EKW={entry:['entry','junior','associate','intern','graduate',' i ','new grad'],mid:['mid','intermediate',' ii','level 2'],senior:['senior','sr',' iii','5+'],lead:['lead','staff','director','manager','chief','architect']};
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')}
+function closeMob(){if(innerWidth<=800){document.getElementById('sidebar').classList.remove('open');document.querySelector('.overlay').classList.remove('open')}}
+function timeAgo(d){const h=Math.floor((new Date()-new Date(d))/3600000);if(h<1)return'Just now';if(h<24)return h+'h';const days=Math.floor(h/24);if(days<30)return days+'d';return Math.floor(days/30)+'mo'}
+function optRing(s){const c=2*Math.PI*13,o=c-(s/100)*c,col=s>=70?'var(--aurora-1)':s>=50?'var(--aurora-5)':'var(--aurora-4)';return'<div class="opt"><svg width="36" height="36"><circle class="bg" cx="18" cy="18" r="13"/><circle class="prog" cx="18" cy="18" r="13" stroke="'+col+'" stroke-dasharray="'+c+'" stroke-dashoffset="'+o+'"/></svg><div class="val" style="color:'+col+'">'+s+'</div></div>'}
+function card(j){const fresh=(new Date()-new Date(j.posted_date))/3600000<48,rem=(j.work_type||'').toLowerCase()==='remote'||(j.location||'').toLowerCase().includes('remote'),skills=(j.skills||[]).slice(0,3).map((s,i)=>'<span class="skill'+(i<2?' hl':'')+'">'+s+'</span>').join('');return'<article class="card" onclick="window.open(\''+j.apply_url+'\',\'_blank\')"><div class="cardh"><div style="display:flex;gap:8px;align-items:center"><div class="clogo">'+(j.company||'NA').substring(0,2).toUpperCase()+'</div><div><div class="cname">'+(j.company||'Company')+'</div><div class="cind">'+(j.industry||'Tech')+'</div></div></div>'+optRing(j.opt_score||50)+'</div><h3 class="jtitle">'+(j.title||'Job')+'</h3><div class="jmeta"><span>📍'+(j.location||'TBD').substring(0,25)+'</span><span>💼'+(j.work_type||'Full-time')+'</span></div><div class="skills">'+skills+'</div><div class="jfoot"><span class="sal">'+(j.salary_display||'Competitive')+'</span><span class="posted'+(fresh?' fresh':'')+'">'+(fresh?'●':'')+timeAgo(j.posted_date)+'</span></div><div class="badges">'+(j.h1b_sponsor_history?'<span class="badge h1b">H-1B</span>':'')+(j.opt_score>=70?'<span class="badge opt">OPT</span>':'')+(rem?'<span class="badge rem">Remote</span>':'')+'</div></article>'}
+function matchM(j,m){if(m==='all')return true;const kw=MKW[m]||[],txt=((j.title||'')+' '+(j.description||'')+' '+(j.skills||[]).join(' ')).toLowerCase();return kw.some(k=>txt.includes(k))}
+function matchE(j,e){if(e==='all')return true;const kw=EKW[e]||[],t=(j.title||'').toLowerCase();return kw.some(k=>t.includes(k))}
+function matchC(j,c){if(c==='all')return true;const loc=(j.location||'').toLowerCase();if(c==='remote')return loc.includes('remote')||(j.work_type||'').toLowerCase()==='remote';return loc.includes(c)}
+function matchJ(j,t){if(t==='all')return true;const title=(j.title||'').toLowerCase();if(t==='intern')return title.includes('intern');if(t==='fulltime')return!title.includes('intern')&&!title.includes('contract');return title.includes(t)}
+function filter(){let r=jobs.slice();if(F.hours>0){const cut=new Date(Date.now()-F.hours*3600000);r=r.filter(j=>new Date(j.posted_date)>=cut)}r=r.filter(j=>matchC(j,F.country));r=r.filter(j=>matchM(j,F.major));if(F.work!=='all')r=r.filter(j=>(j.work_type||'').toLowerCase()===F.work);r=r.filter(j=>matchJ(j,F.jtype));r=r.filter(j=>matchE(j,F.exp));if(F.h1b)r=r.filter(j=>j.h1b_sponsor_history);if(F.hideCit)r=r.filter(j=>!j.citizenship_required);if(F.hideClr)r=r.filter(j=>!j.clearance_required);if(F.q){const q=F.q.toLowerCase();r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.skills||[]).some(s=>s.toLowerCase().includes(q)))}if(F.hideDup){const seen={};r=r.filter(j=>{const k=(j.title||'').toLowerCase()+'|'+(j.company||'').toLowerCase();if(seen[k])return false;seen[k]=true;return true})}return r}
+function sort(arr){const s=document.getElementById('sortS').value;return arr.sort((a,b)=>{if(s==='score')return(b.opt_score||0)-(a.opt_score||0);if(s==='recent')return new Date(b.posted_date)-new Date(a.posted_date);return(a.company||'').localeCompare(b.company||'')})}
+function render(){let r=sort(filter());shown=Math.min(PAGE,r.length);document.getElementById('showC').textContent=r.length;document.getElementById('totC').textContent=jobs.length;document.getElementById('grid').innerHTML=r.length?r.slice(0,shown).map(card).join(''):'<div class="loading">No jobs match. Adjust filters.</div>';document.getElementById('loadmore').style.display=r.length>shown?'block':'none';if(r.length>shown)document.getElementById('loadmore').textContent='Load More ('+(r.length-shown)+')'}
+function loadMore(){let r=sort(filter());shown+=PAGE;document.getElementById('grid').innerHTML=r.slice(0,shown).map(card).join('');document.getElementById('loadmore').style.display=r.length>shown?'block':'none'}
+function clearAll(){F={q:'',country:'all',major:'all',hours:0,work:'all',jtype:'all',exp:'all',h1b:false,hideCit:true,hideClr:true,hideDup:false};document.getElementById('search').value='';document.getElementById('country').value='all';document.getElementById('major').value='all';document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[data-h="0"],[data-w="all"],[data-j="all"],[data-e="all"]').forEach(b=>b.classList.add('active'));document.getElementById('tCit').classList.add('on');document.getElementById('tClr').classList.add('on');document.getElementById('tH1b').classList.remove('on');document.getElementById('tDup').classList.remove('on');render();closeMob()}
+function updateC(){document.getElementById('jobC').textContent=jobs.length;document.getElementById('compC').textContent=new Set(jobs.map(j=>j.company)).size;document.getElementById('h1bC').textContent=new Set(jobs.filter(j=>j.h1b_sponsor_history).map(j=>j.company)).size}
+function fetchJobs(){fetch(API+'/api/jobs?page_size=10000').then(r=>r.json()).then(d=>{jobs=d.jobs||[];updateC();render()}).catch(e=>{document.getElementById('grid').innerHTML='<div class="loading">⚠️ API unavailable</div>'})}
+document.getElementById('search').addEventListener('input',e=>{F.q=e.target.value;render()});
+document.getElementById('country').addEventListener('change',e=>{F.country=e.target.value;render();closeMob()});
+document.getElementById('major').addEventListener('change',e=>{F.major=e.target.value;render();closeMob()});
+document.getElementById('sortS').addEventListener('change',()=>render());
+document.querySelectorAll('.time').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.hours=+b.dataset.h;render();closeMob()}));
+document.querySelectorAll('.work').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.work').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.work=b.dataset.w;render();closeMob()}));
+document.querySelectorAll('.jtype').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.jtype').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.jtype=b.dataset.j;render();closeMob()}));
+document.querySelectorAll('.exp').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.exp').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.exp=b.dataset.e;render();closeMob()}));
+document.getElementById('tCit').addEventListener('click',function(){this.classList.toggle('on');F.hideCit=this.classList.contains('on');render()});
+document.getElementById('tH1b').addEventListener('click',function(){this.classList.toggle('on');F.h1b=this.classList.contains('on');render()});
+document.getElementById('tClr').addEventListener('click',function(){this.classList.toggle('on');F.hideClr=this.classList.contains('on');render()});
+document.getElementById('tDup').addEventListener('click',function(){this.classList.toggle('on');F.hideDup=this.classList.contains('on');render()});
+fetchJobs();setInterval(fetchJobs,600000);
+</script>
 </body>
 </html>
