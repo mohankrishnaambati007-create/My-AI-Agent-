@@ -3,173 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY AI AGENT | Job Discovery for All Majors</title>
+    <title>MY AI AGENT | Jobs for All Majors</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Syne:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root{--void:#000;--cosmos:#0a0a0f;--nebula:#12121a;--aurora-1:#00f5d4;--aurora-2:#00bbf9;--aurora-3:#9b5de5;--aurora-4:#f15bb5;--aurora-5:#fee440;--ghost:rgba(255,255,255,0.03);--whisper:rgba(255,255,255,0.06);--fog:rgba(255,255,255,0.24);--cloud:rgba(255,255,255,0.48);--pure:#fff}
-        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--void);color:var(--pure);min-height:100vh}
-        header{position:fixed;top:0;left:0;right:0;height:54px;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--ghost);z-index:100}
-        .logo{display:flex;align-items:center;gap:8px}.logo-text{font-family:'Syne';font-size:1rem;font-weight:700}
-        .stats{display:flex;gap:10px;font-size:0.6rem;color:var(--fog)}.stat-val{color:var(--pure);font-weight:700}
-        .menu-btn{display:none;background:none;border:none;color:var(--pure);font-size:1.3rem;cursor:pointer}
-        main{margin-top:54px;display:flex}
-        .sidebar{width:280px;background:var(--cosmos);padding:12px;overflow-y:auto;position:fixed;top:54px;left:0;bottom:0;z-index:50;transition:transform 0.3s}
-        .stitle{font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fog);margin:10px 0 6px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#000;color:#fff;min-height:100vh}
+        header{position:fixed;top:0;left:0;right:0;height:50px;background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #222;z-index:100}
+        .logo{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px}
+        .stats{display:flex;gap:12px;font-size:0.7rem;color:#888}.stats span{color:#0f9}
+        .menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px 8px}
+        main{margin-top:50px;display:flex}
+        .sidebar{width:260px;background:#0a0a0a;padding:12px;overflow-y:auto;position:fixed;top:50px;left:0;bottom:0;z-index:50;transition:transform 0.2s}
+        .stitle{font-size:0.65rem;font-weight:600;color:#666;margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
         .stitle:first-child{margin-top:0}
-        .search,.select{width:100%;padding:8px 10px;background:var(--ghost);border:1px solid var(--whisper);border-radius:6px;color:var(--pure);font-size:0.8rem;outline:none}
-        .search:focus,.select:focus{border-color:var(--aurora-1)}
-        .select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
-        .filters{display:flex;flex-wrap:wrap;gap:4px}
-        .fbtn{padding:4px 9px;background:var(--ghost);border:1px solid var(--whisper);border-radius:20px;color:var(--cloud);font-size:0.68rem;cursor:pointer}
-        .fbtn:hover{background:var(--whisper)}.fbtn.active{background:var(--aurora-1);color:var(--void);border-color:transparent}
-        .vpanel{background:var(--nebula);border:1px solid var(--whisper);border-radius:8px;padding:10px;margin-top:10px}
-        .vtitle{font-weight:700;font-size:0.78rem;margin-bottom:8px}
-        .trow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--ghost);font-size:0.7rem;color:var(--cloud)}
+        input[type="text"]{width:100%;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.85rem;outline:none}
+        input[type="text"]:focus{border-color:#0f9}
+        select{width:100%;padding:10px;background-color:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.85rem;outline:none;cursor:pointer}
+        select:focus{border-color:#0f9}
+        select option{background-color:#111;color:#fff;padding:8px}
+        .chips{display:flex;flex-wrap:wrap;gap:6px}
+        .chip{padding:6px 12px;background:#111;border:1px solid #333;border-radius:20px;color:#aaa;font-size:0.75rem;cursor:pointer;transition:all 0.15s}
+        .chip:hover{background:#222}
+        .chip.on{background:#0f9;color:#000;border-color:#0f9}
+        .panel{background:#111;border:1px solid #222;border-radius:8px;padding:10px;margin-top:12px}
+        .panel-title{font-weight:600;font-size:0.8rem;margin-bottom:8px}
+        .trow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:0.75rem;color:#aaa;border-bottom:1px solid #222}
         .trow:last-child{border:none}
-        .toggle{width:34px;height:17px;background:#1a1a24;border-radius:9px;position:relative;cursor:pointer}
-        .toggle::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--fog);border-radius:50%;transition:0.2s}
-        .toggle.on{background:var(--aurora-1)}.toggle.on::after{left:19px;background:var(--void)}
-        .clrbtn{width:100%;padding:7px;margin-top:10px;background:transparent;border:1px solid var(--aurora-4);border-radius:5px;color:var(--aurora-4);font-size:0.72rem;cursor:pointer}
-        .clrbtn:hover{background:var(--aurora-4);color:var(--void)}
-        .content{flex:1;padding:14px;margin-left:280px}
-        .cheader{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
-        .ctitle{font-family:'Syne';font-size:1.4rem;font-weight:700}
-        .csub{color:var(--fog);font-size:0.78rem}.csub span{color:var(--aurora-1)}
-        .sortsel{padding:6px 8px;background:var(--ghost);border:1px solid var(--whisper);border-radius:5px;color:var(--pure);font-size:0.72rem}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-        .card{background:linear-gradient(145deg,var(--nebula),var(--cosmos));border:1px solid var(--whisper);border-radius:10px;padding:12px;cursor:pointer;transition:0.2s}
-        .card:hover{transform:translateY(-2px);border-color:var(--aurora-1)}
-        .cardh{display:flex;justify-content:space-between;margin-bottom:8px}
-        .clogo{width:34px;height:34px;border-radius:6px;background:linear-gradient(135deg,var(--aurora-1),var(--aurora-2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.65rem;color:var(--void)}
-        .cname{font-weight:600;font-size:0.78rem}.cind{font-size:0.62rem;color:var(--fog)}
-        .opt{width:36px;height:36px;position:relative}.opt svg{transform:rotate(-90deg)}.opt circle{fill:none;stroke-width:3}.opt .bg{stroke:#1a1a24}.opt .prog{stroke:var(--aurora-1);stroke-linecap:round}
-        .opt .val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.58rem;font-weight:700}
-        .jtitle{font-size:0.85rem;font-weight:600;margin-bottom:6px;line-height:1.2}
-        .jmeta{display:flex;gap:8px;font-size:0.65rem;color:var(--fog);margin-bottom:6px;flex-wrap:wrap}
-        .skills{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
-        .skill{padding:2px 6px;background:var(--ghost);border-radius:3px;font-size:0.6rem;color:var(--cloud)}
-        .skill.hl{background:rgba(0,245,212,0.15);color:var(--aurora-1)}
-        .jfoot{display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid var(--ghost);font-size:0.68rem}
-        .sal{color:var(--aurora-1);font-weight:700}.posted{color:var(--fog)}.posted.fresh{color:var(--aurora-1)}
-        .badges{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap}
-        .badge{padding:2px 5px;border-radius:3px;font-size:0.55rem;font-weight:600}
-        .badge.h1b{background:rgba(0,245,212,0.15);color:var(--aurora-1)}
-        .badge.opt{background:rgba(254,228,64,0.15);color:var(--aurora-5)}
-        .badge.rem{background:rgba(155,93,229,0.15);color:var(--aurora-3)}
-        .loading{text-align:center;padding:30px;color:var(--fog)}
-        .spinner{width:28px;height:28px;border:3px solid var(--ghost);border-top-color:var(--aurora-1);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 8px}
+        .tog{width:36px;height:20px;background:#333;border-radius:10px;position:relative;cursor:pointer;transition:0.2s}
+        .tog::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#666;border-radius:50%;transition:0.2s}
+        .tog.on{background:#0f9}
+        .tog.on::after{left:19px;background:#000}
+        .clr-btn{width:100%;padding:8px;margin-top:12px;background:transparent;border:1px solid #f59;border-radius:6px;color:#f59;font-size:0.75rem;cursor:pointer}
+        .clr-btn:hover{background:#f59;color:#000}
+        .content{flex:1;padding:14px;margin-left:260px}
+        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+        .title{font-size:1.3rem;font-weight:700}
+        .sub{color:#666;font-size:0.8rem}.sub b{color:#0f9}
+        .sort{padding:8px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.75rem}
+        .sort option{background:#111;color:#fff}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+        .card{background:#111;border:1px solid #222;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s}
+        .card:hover{border-color:#0f9;transform:translateY(-2px)}
+        .card-top{display:flex;justify-content:space-between;margin-bottom:8px}
+        .comp{display:flex;gap:10px;align-items:center}
+        .logo-box{width:38px;height:38px;background:linear-gradient(135deg,#0f9,#09f);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;color:#000}
+        .comp-name{font-weight:600;font-size:0.85rem}
+        .comp-ind{font-size:0.65rem;color:#666}
+        .score{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem}
+        .score.high{background:rgba(0,255,153,0.15);color:#0f9}
+        .score.mid{background:rgba(255,221,0,0.15);color:#fd0}
+        .score.low{background:rgba(255,100,100,0.15);color:#f66}
+        .job-title{font-size:0.95rem;font-weight:600;margin-bottom:6px;line-height:1.3}
+        .meta{display:flex;flex-wrap:wrap;gap:8px;font-size:0.7rem;color:#888;margin-bottom:8px}
+        .tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+        .tag{padding:3px 8px;background:#1a1a1a;border-radius:4px;font-size:0.65rem;color:#aaa}
+        .tag.hl{background:rgba(0,255,153,0.1);color:#0f9}
+        .card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid #222;font-size:0.75rem}
+        .salary{color:#0f9;font-weight:600}
+        .time{color:#666}.time.new{color:#0f9}
+        .badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+        .badge{padding:2px 6px;border-radius:3px;font-size:0.6rem;font-weight:600}
+        .badge.h1b{background:rgba(0,255,153,0.15);color:#0f9}
+        .badge.opt{background:rgba(255,221,0,0.15);color:#fd0}
+        .badge.rem{background:rgba(153,93,229,0.15);color:#95f}
+        .badge.new{background:rgba(255,100,150,0.15);color:#f59}
+        .loading{text-align:center;padding:40px;color:#666}
+        .spinner{width:30px;height:30px;border:3px solid #222;border-top-color:#0f9;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px}
         @keyframes spin{to{transform:rotate(360deg)}}
-        .loadmore{width:100%;padding:10px;margin-top:14px;background:var(--ghost);border:1px solid var(--whisper);border-radius:6px;color:var(--pure);font-size:0.8rem;cursor:pointer}
-        .loadmore:hover{background:var(--aurora-1);color:var(--void)}
-        .overlay{display:none;position:fixed;top:54px;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:40}
-        @media(max-width:800px){.menu-btn{display:block}.stats{display:none}.sidebar{transform:translateX(-100%);width:85%}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.content{margin-left:0}.grid{grid-template-columns:1fr}}
+        .more-btn{width:100%;padding:12px;margin-top:14px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:0.85rem;cursor:pointer}
+        .more-btn:hover{background:#0f9;color:#000;border-color:#0f9}
+        .overlay{display:none;position:fixed;inset:0;top:50px;background:rgba(0,0,0,0.8);z-index:40}
+        @media(max-width:768px){.menu-btn{display:block}.stats{display:none}.sidebar{transform:translateX(-100%);width:85%}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.content{margin-left:0;padding:10px}.grid{grid-template-columns:1fr}.title{font-size:1.1rem}}
     </style>
 </head>
 <body>
 <header>
-    <div class="logo"><button class="menu-btn" onclick="toggleSidebar()">☰</button><span class="logo-text">🚀 MY AI AGENT</span></div>
-    <div class="stats"><span>COMPANIES <span class="stat-val" id="compC">0</span></span><span>H1B <span class="stat-val" id="h1bC">0</span></span><span>JOBS <span class="stat-val" id="jobC">0</span></span></div>
+    <div class="logo"><button class="menu-btn" onclick="toggle()">☰</button>🚀 MY AI AGENT</div>
+    <div class="stats">Companies: <span id="sComp">0</span> | H1B: <span id="sH1b">0</span> | Jobs: <span id="sJobs">0</span></div>
 </header>
-<div class="overlay" onclick="toggleSidebar()"></div>
+<div class="overlay" onclick="toggle()"></div>
 <main>
 <aside class="sidebar" id="sidebar">
-    <div class="stitle">🔍 SEARCH</div>
-    <input class="search" id="search" placeholder="Job, company, skills...">
-    <div class="stitle">🌍 COUNTRY</div>
-    <select class="select" id="country">
-        <option value="all">🌐 All Countries</option>
+    <div class="stitle">🔍 Search</div>
+    <input type="text" id="search" placeholder="Job title, company, skill...">
+    <div class="stitle">🌍 Country</div>
+    <select id="country">
+        <option value="">All Countries</option>
         <option value="united states">🇺🇸 United States</option>
-        <option value="remote">🏠 Remote Only</option>
+        <option value="remote">🌐 Remote Only</option>
         <option value="canada">🇨🇦 Canada</option>
-        <option value="united kingdom">🇬🇧 UK</option>
+        <option value="united kingdom">🇬🇧 United Kingdom</option>
         <option value="germany">🇩🇪 Germany</option>
         <option value="india">🇮🇳 India</option>
         <option value="australia">🇦🇺 Australia</option>
         <option value="singapore">🇸🇬 Singapore</option>
         <option value="japan">🇯🇵 Japan</option>
+        <option value="ireland">🇮🇪 Ireland</option>
         <option value="france">🇫🇷 France</option>
         <option value="netherlands">🇳🇱 Netherlands</option>
-        <option value="ireland">🇮🇪 Ireland</option>
     </select>
-    <div class="stitle">🎓 FIELD / MAJOR</div>
-    <select class="select" id="major">
-        <option value="all">📚 All Fields</option>
-        <option value="software">💻 Software Engineering</option>
+    <div class="stitle">🎓 Field / Major</div>
+    <select id="major">
+        <option value="">All Fields</option>
+        <option value="software">💻 Software / Development</option>
         <option value="data">📊 Data Science / AI / ML</option>
         <option value="cybersecurity">🛡️ Cybersecurity</option>
         <option value="cloud">☁️ Cloud / DevOps</option>
-        <option value="networking">🌐 Networking / IT</option>
+        <option value="network">🌐 Networking / IT</option>
         <option value="product">📦 Product Management</option>
-        <option value="design">🎨 Design / UX</option>
+        <option value="design">🎨 Design / UX / UI</option>
         <option value="business">📈 Business / Operations</option>
         <option value="finance">💰 Finance / Accounting</option>
         <option value="marketing">📢 Marketing / Sales</option>
         <option value="hr">👥 HR / Recruiting</option>
-        <option value="legal">⚖️ Legal</option>
-        <option value="healthcare">🏥 Healthcare</option>
-        <option value="engineering">⚙️ Mech/Electrical Eng</option>
+        <option value="legal">⚖️ Legal / Compliance</option>
+        <option value="healthcare">🏥 Healthcare / Biotech</option>
+        <option value="engineering">⚙️ Mechanical / Electrical</option>
         <option value="support">🎧 Customer Support</option>
     </select>
-    <div class="stitle">⏰ POSTED</div>
-    <div class="filters"><button class="fbtn time active" data-h="0">All</button><button class="fbtn time" data-h="24">24h</button><button class="fbtn time" data-h="48">48h</button><button class="fbtn time" data-h="168">7d</button><button class="fbtn time" data-h="720">30d</button></div>
-    <div class="stitle">💼 WORK TYPE</div>
-    <div class="filters"><button class="fbtn work active" data-w="all">All</button><button class="fbtn work" data-w="remote">Remote</button><button class="fbtn work" data-w="hybrid">Hybrid</button><button class="fbtn work" data-w="onsite">Onsite</button></div>
-    <div class="stitle">📋 JOB TYPE</div>
-    <div class="filters"><button class="fbtn jtype active" data-j="all">All</button><button class="fbtn jtype" data-j="fulltime">Full-time</button><button class="fbtn jtype" data-j="intern">Intern</button><button class="fbtn jtype" data-j="contract">Contract</button></div>
-    <div class="stitle">📊 EXPERIENCE</div>
-    <div class="filters"><button class="fbtn exp active" data-e="all">All</button><button class="fbtn exp" data-e="entry">Entry</button><button class="fbtn exp" data-e="mid">Mid</button><button class="fbtn exp" data-e="senior">Senior</button><button class="fbtn exp" data-e="lead">Lead+</button></div>
-    <div class="vpanel">
-        <div class="vtitle">🎫 Visa Filters</div>
-        <div class="trow"><span>Hide Citizenship Req</span><div class="toggle on" id="tCit"></div></div>
-        <div class="trow"><span>H-1B Sponsors Only</span><div class="toggle" id="tH1b"></div></div>
-        <div class="trow"><span>No Clearance</span><div class="toggle on" id="tClr"></div></div>
-        <div class="trow"><span>Hide Duplicates</span><div class="toggle" id="tDup"></div></div>
+    <div class="stitle">⏰ Posted Within</div>
+    <div class="chips" id="timeChips">
+        <button class="chip on" data-v="0">All</button>
+        <button class="chip" data-v="24">24h</button>
+        <button class="chip" data-v="48">48h</button>
+        <button class="chip" data-v="168">7d</button>
+        <button class="chip" data-v="720">30d</button>
     </div>
-    <button class="clrbtn" onclick="clearAll()">🗑️ Clear Filters</button>
+    <div class="stitle">🎯 Job Type</div>
+    <div class="chips" id="typeChips">
+        <button class="chip on" data-v="">All</button>
+        <button class="chip" data-v="intern">🎓 Internship</button>
+        <button class="chip" data-v="full">💼 Full-time</button>
+        <button class="chip" data-v="contract">📄 Contract</button>
+    </div>
+    <div class="stitle">📊 Experience Level</div>
+    <div class="chips" id="expChips">
+        <button class="chip on" data-v="">All</button>
+        <button class="chip" data-v="entry">🌱 Entry</button>
+        <button class="chip" data-v="mid">📈 Mid</button>
+        <button class="chip" data-v="senior">⭐ Senior</button>
+        <button class="chip" data-v="lead">👑 Lead+</button>
+    </div>
+    <div class="stitle">💼 Work Mode</div>
+    <div class="chips" id="workChips">
+        <button class="chip on" data-v="">All</button>
+        <button class="chip" data-v="remote">🏠 Remote</button>
+        <button class="chip" data-v="hybrid">🔄 Hybrid</button>
+        <button class="chip" data-v="onsite">🏢 Onsite</button>
+    </div>
+    <div class="panel">
+        <div class="panel-title">🎫 Visa Filters</div>
+        <div class="trow"><span>Hide Citizenship Required</span><div class="tog on" id="tCit"></div></div>
+        <div class="trow"><span>H-1B Sponsors Only</span><div class="tog" id="tH1b"></div></div>
+        <div class="trow"><span>Hide Clearance Jobs</span><div class="tog on" id="tClr"></div></div>
+        <div class="trow"><span>Hide Duplicate Titles</span><div class="tog" id="tDup"></div></div>
+    </div>
+    <button class="clr-btn" onclick="clearAll()">🗑️ Clear All Filters</button>
 </aside>
 <section class="content">
-    <div class="cheader"><div><h1 class="ctitle">Discover Jobs</h1><p class="csub">Showing <span id="showC">0</span> of <span id="totC">0</span></p></div>
-    <select class="sortsel" id="sortS"><option value="score">OPT Score</option><option value="recent">Recent</option><option value="company">Company</option></select></div>
-    <div class="grid" id="grid"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-    <button class="loadmore" id="loadmore" style="display:none" onclick="loadMore()">Load More</button>
+    <div class="header">
+        <div><h1 class="title">Discover Jobs</h1><p class="sub">Showing <b id="showN">0</b> of <b id="totalN">0</b> jobs</p></div>
+        <select class="sort" id="sortBy">
+            <option value="score">Sort: OPT Score</option>
+            <option value="recent">Sort: Most Recent</option>
+            <option value="company">Sort: Company A-Z</option>
+        </select>
+    </div>
+    <div class="grid" id="grid"><div class="loading"><div class="spinner"></div>Loading jobs...</div></div>
+    <button class="more-btn" id="moreBtn" style="display:none" onclick="loadMore()">Load More Jobs</button>
 </section>
 </main>
 <script>
 const API=location.hostname==='localhost'?'http://localhost:8000':'https://my-ai-agent-5eoe.onrender.com';
-let jobs=[],shown=0,PAGE=50;
-let F={q:'',country:'all',major:'all',hours:0,work:'all',jtype:'all',exp:'all',h1b:false,hideCit:true,hideClr:true,hideDup:false};
-const MKW={software:['software','developer','engineer','fullstack','frontend','backend','java','python','javascript','react','node','mobile','ios','android','golang'],data:['data','analytics','machine learning','ml','ai','scientist','analyst','bi','sql','statistics','deep learning'],cybersecurity:['security','cyber','infosec','soc','penetration','vulnerability','threat','compliance'],cloud:['cloud','aws','azure','gcp','devops','kubernetes','docker','terraform','sre'],networking:['network','cisco','routing','switching','firewall','vpn','administrator','sysadmin'],product:['product manager','product owner','roadmap'],design:['design','ux','ui','figma','sketch','adobe','creative'],business:['business analyst','operations','project manager','program manager','scrum','agile'],finance:['finance','accounting','financial','cpa','audit','tax','investment','banking'],marketing:['marketing','sales','growth','seo','content','social media','brand','account executive'],hr:['human resources','hr','recruiting','recruiter','talent'],legal:['legal','lawyer','compliance','contract','counsel'],healthcare:['healthcare','medical','clinical','biotech','pharmaceutical'],engineering:['mechanical','electrical','hardware','civil','manufacturing','cad'],support:['support','customer success','help desk']};
-const EKW={entry:['entry','junior','associate','intern','graduate',' i ','new grad'],mid:['mid','intermediate',' ii','level 2'],senior:['senior','sr',' iii','5+'],lead:['lead','staff','director','manager','chief','architect']};
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')}
-function closeMob(){if(innerWidth<=800){document.getElementById('sidebar').classList.remove('open');document.querySelector('.overlay').classList.remove('open')}}
-function timeAgo(d){const h=Math.floor((new Date()-new Date(d))/3600000);if(h<1)return'Just now';if(h<24)return h+'h';const days=Math.floor(h/24);if(days<30)return days+'d';return Math.floor(days/30)+'mo'}
-function optRing(s){const c=2*Math.PI*13,o=c-(s/100)*c,col=s>=70?'var(--aurora-1)':s>=50?'var(--aurora-5)':'var(--aurora-4)';return'<div class="opt"><svg width="36" height="36"><circle class="bg" cx="18" cy="18" r="13"/><circle class="prog" cx="18" cy="18" r="13" stroke="'+col+'" stroke-dasharray="'+c+'" stroke-dashoffset="'+o+'"/></svg><div class="val" style="color:'+col+'">'+s+'</div></div>'}
-function card(j){const fresh=(new Date()-new Date(j.posted_date))/3600000<48,rem=(j.work_type||'').toLowerCase()==='remote'||(j.location||'').toLowerCase().includes('remote'),skills=(j.skills||[]).slice(0,3).map((s,i)=>'<span class="skill'+(i<2?' hl':'')+'">'+s+'</span>').join('');return'<article class="card" onclick="window.open(\''+j.apply_url+'\',\'_blank\')"><div class="cardh"><div style="display:flex;gap:8px;align-items:center"><div class="clogo">'+(j.company||'NA').substring(0,2).toUpperCase()+'</div><div><div class="cname">'+(j.company||'Company')+'</div><div class="cind">'+(j.industry||'Tech')+'</div></div></div>'+optRing(j.opt_score||50)+'</div><h3 class="jtitle">'+(j.title||'Job')+'</h3><div class="jmeta"><span>📍'+(j.location||'TBD').substring(0,25)+'</span><span>💼'+(j.work_type||'Full-time')+'</span></div><div class="skills">'+skills+'</div><div class="jfoot"><span class="sal">'+(j.salary_display||'Competitive')+'</span><span class="posted'+(fresh?' fresh':'')+'">'+(fresh?'●':'')+timeAgo(j.posted_date)+'</span></div><div class="badges">'+(j.h1b_sponsor_history?'<span class="badge h1b">H-1B</span>':'')+(j.opt_score>=70?'<span class="badge opt">OPT</span>':'')+(rem?'<span class="badge rem">Remote</span>':'')+'</div></article>'}
-function matchM(j,m){if(m==='all')return true;const kw=MKW[m]||[],txt=((j.title||'')+' '+(j.description||'')+' '+(j.skills||[]).join(' ')).toLowerCase();return kw.some(k=>txt.includes(k))}
-function matchE(j,e){if(e==='all')return true;const kw=EKW[e]||[],t=(j.title||'').toLowerCase();return kw.some(k=>t.includes(k))}
-function matchC(j,c){if(c==='all')return true;const loc=(j.location||'').toLowerCase();if(c==='remote')return loc.includes('remote')||(j.work_type||'').toLowerCase()==='remote';return loc.includes(c)}
-function matchJ(j,t){if(t==='all')return true;const title=(j.title||'').toLowerCase();if(t==='intern')return title.includes('intern');if(t==='fulltime')return!title.includes('intern')&&!title.includes('contract');return title.includes(t)}
-function filter(){let r=jobs.slice();if(F.hours>0){const cut=new Date(Date.now()-F.hours*3600000);r=r.filter(j=>new Date(j.posted_date)>=cut)}r=r.filter(j=>matchC(j,F.country));r=r.filter(j=>matchM(j,F.major));if(F.work!=='all')r=r.filter(j=>(j.work_type||'').toLowerCase()===F.work);r=r.filter(j=>matchJ(j,F.jtype));r=r.filter(j=>matchE(j,F.exp));if(F.h1b)r=r.filter(j=>j.h1b_sponsor_history);if(F.hideCit)r=r.filter(j=>!j.citizenship_required);if(F.hideClr)r=r.filter(j=>!j.clearance_required);if(F.q){const q=F.q.toLowerCase();r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.skills||[]).some(s=>s.toLowerCase().includes(q)))}if(F.hideDup){const seen={};r=r.filter(j=>{const k=(j.title||'').toLowerCase()+'|'+(j.company||'').toLowerCase();if(seen[k])return false;seen[k]=true;return true})}return r}
-function sort(arr){const s=document.getElementById('sortS').value;return arr.sort((a,b)=>{if(s==='score')return(b.opt_score||0)-(a.opt_score||0);if(s==='recent')return new Date(b.posted_date)-new Date(a.posted_date);return(a.company||'').localeCompare(b.company||'')})}
-function render(){let r=sort(filter());shown=Math.min(PAGE,r.length);document.getElementById('showC').textContent=r.length;document.getElementById('totC').textContent=jobs.length;document.getElementById('grid').innerHTML=r.length?r.slice(0,shown).map(card).join(''):'<div class="loading">No jobs match. Adjust filters.</div>';document.getElementById('loadmore').style.display=r.length>shown?'block':'none';if(r.length>shown)document.getElementById('loadmore').textContent='Load More ('+(r.length-shown)+')'}
-function loadMore(){let r=sort(filter());shown+=PAGE;document.getElementById('grid').innerHTML=r.slice(0,shown).map(card).join('');document.getElementById('loadmore').style.display=r.length>shown?'block':'none'}
-function clearAll(){F={q:'',country:'all',major:'all',hours:0,work:'all',jtype:'all',exp:'all',h1b:false,hideCit:true,hideClr:true,hideDup:false};document.getElementById('search').value='';document.getElementById('country').value='all';document.getElementById('major').value='all';document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[data-h="0"],[data-w="all"],[data-j="all"],[data-e="all"]').forEach(b=>b.classList.add('active'));document.getElementById('tCit').classList.add('on');document.getElementById('tClr').classList.add('on');document.getElementById('tH1b').classList.remove('on');document.getElementById('tDup').classList.remove('on');render();closeMob()}
-function updateC(){document.getElementById('jobC').textContent=jobs.length;document.getElementById('compC').textContent=new Set(jobs.map(j=>j.company)).size;document.getElementById('h1bC').textContent=new Set(jobs.filter(j=>j.h1b_sponsor_history).map(j=>j.company)).size}
-function fetchJobs(){fetch(API+'/api/jobs?page_size=10000').then(r=>r.json()).then(d=>{jobs=d.jobs||[];updateC();render()}).catch(e=>{document.getElementById('grid').innerHTML='<div class="loading">⚠️ API unavailable</div>'})}
+let allJobs=[],filteredJobs=[],shown=0;const PAGE=60;
+let F={q:'',country:'',major:'',hours:0,type:'',exp:'',work:'',hideCit:true,h1bOnly:false,hideClr:true,hideDup:false};
+const CAT_KW={software:['software','developer','engineer','frontend','backend','fullstack','full stack','mobile','ios','android','java','python','javascript','react','node','golang','rust','c++','ruby','php','.net','web dev'],data:['data','analytics','machine learning','ml','ai','artificial intelligence','scientist','analyst','bi ','business intelligence','etl','sql','statistics','deep learning','nlp','big data'],cybersecurity:['security','cyber','infosec','soc ','penetration','vulnerability','threat','incident','compliance','grc','risk','firewall','encryption','identity','iam'],cloud:['cloud','aws','azure','gcp','devops','kubernetes','k8s','docker','terraform','infrastructure','sre','site reliability','platform'],network:['network','cisco','ccna','ccnp','routing','switching','vpn','tcp','lan','wan','administrator','sysadmin','system admin'],product:['product manager','product management','product owner','pm ','roadmap'],design:['design','ux','ui','user experience','user interface','product design','graphic','visual','figma','sketch','adobe','creative'],business:['business analyst','business operations','operations','project manager','program manager','scrum','agile','strategy','consultant','management consulting'],finance:['finance','accounting','financial','cpa','audit','tax','treasury','controller','investment','banking','accounts payable','accounts receivable'],marketing:['marketing','sales','growth','seo','sem','content','social media','brand','advertising','digital marketing','demand','account executive','sdr','bdr'],hr:['human resources','hr ','recruiting','recruiter','talent','people operations','hrbp','compensation','benefits'],legal:['legal','lawyer','attorney','compliance','contract','regulatory','counsel','paralegal','privacy'],healthcare:['healthcare','health','medical','clinical','biotech','pharmaceutical','life sciences','patient'],engineering:['mechanical','electrical','hardware','civil','structural','manufacturing','quality','process','industrial','cad'],support:['support','customer success','customer service','help desk','technical support','service desk','client success']};
+const EXP_KW={entry:['intern','entry','junior','jr','associate','graduate','new grad','level 1','level i',' i ','early career','0-2','1-2','fresher','trainee'],mid:['mid','intermediate',' ii','level 2','level ii',' 2 ','2-5','3-5','2+','3+','4+'],senior:['senior','sr ','sr.',' iii','level 3','level iii',' 3 ','5+','5-7','7+','experienced','specialist'],lead:['lead','principal','staff','director','head','manager','chief','vp','vice president','executive','architect',' iv','level 4']};
+function toggle(){document.getElementById('sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')}
+function closeMobile(){if(innerWidth<=768){document.getElementById('sidebar').classList.remove('open');document.querySelector('.overlay').classList.remove('open')}}
+function timeAgo(d){const h=Math.floor((Date.now()-new Date(d))/3600000);if(h<1)return'Just now';if(h<24)return h+'h ago';const days=Math.floor(h/24);if(days<30)return days+'d ago';return Math.floor(days/30)+'mo ago'}
+function renderCard(j){const hrs=(Date.now()-new Date(j.posted_date))/3600000,isNew=hrs<48,isRemote=(j.work_type||'').toLowerCase()==='remote'||(j.location||'').toLowerCase().includes('remote'),score=j.opt_score||50,scoreClass=score>=70?'high':score>=50?'mid':'low',skills=(j.skills||[]).slice(0,4);return'<article class="card" onclick="window.open(\''+j.apply_url+'\',\'_blank\')"><div class="card-top"><div class="comp"><div class="logo-box">'+(j.company||'NA').substring(0,2).toUpperCase()+'</div><div><div class="comp-name">'+(j.company||'Company')+'</div><div class="comp-ind">'+(j.industry||'Technology')+'</div></div></div><div class="score '+scoreClass+'">'+score+'</div></div><h3 class="job-title">'+(j.title||'Job Title')+'</h3><div class="meta"><span>📍 '+(j.location||'TBD').substring(0,28)+'</span><span>💼 '+(j.work_type||'Full-time')+'</span></div><div class="tags">'+skills.map((s,i)=>'<span class="tag'+(i<2?' hl':'')+'">'+s+'</span>').join('')+'</div><div class="card-foot"><span class="salary">'+(j.salary_display||'Competitive')+'</span><span class="time'+(isNew?' new':'')+'">'+(isNew?'🔥 ':'')+timeAgo(j.posted_date)+'</span></div><div class="badges">'+(j.h1b_sponsor_history?'<span class="badge h1b">H-1B</span>':'')+(score>=70?'<span class="badge opt">OPT</span>':'')+(isRemote?'<span class="badge rem">Remote</span>':'')+(isNew?'<span class="badge new">New</span>':'')+'</div></article>'}
+function matchCat(j,c){if(!c)return true;const kws=CAT_KW[c]||[],txt=((j.title||'')+' '+(j.description||'')+' '+(j.skills||[]).join(' ')).toLowerCase();return kws.some(k=>txt.includes(k))}
+function matchExp(j,e){if(!e)return true;const kws=EXP_KW[e]||[],t=(j.title||'').toLowerCase();return kws.some(k=>t.includes(k))}
+function matchType(j,t){if(!t)return true;const title=(j.title||'').toLowerCase();if(t==='intern')return title.includes('intern');if(t==='full')return!title.includes('intern')&&!title.includes('contract')&&!title.includes('part-time');if(t==='contract')return title.includes('contract');return true}
+function matchWork(j,w){if(!w)return true;const wt=(j.work_type||'').toLowerCase(),loc=(j.location||'').toLowerCase();if(w==='remote')return wt==='remote'||loc.includes('remote');if(w==='hybrid')return wt==='hybrid'||loc.includes('hybrid');if(w==='onsite')return wt==='onsite'||wt==='on-site'||(!loc.includes('remote')&&!wt.includes('remote')&&!wt.includes('hybrid'));return true}
+function matchCountry(j,c){if(!c)return true;const loc=(j.location||'').toLowerCase();if(c==='remote')return loc.includes('remote')||(j.work_type||'').toLowerCase()==='remote';return loc.includes(c.toLowerCase())}
+function applyFilters(){let r=allJobs;if(F.hours>0){const cut=Date.now()-F.hours*3600000;r=r.filter(j=>new Date(j.posted_date)>=cut)}if(F.country)r=r.filter(j=>matchCountry(j,F.country));if(F.major)r=r.filter(j=>matchCat(j,F.major));if(F.type)r=r.filter(j=>matchType(j,F.type));if(F.exp)r=r.filter(j=>matchExp(j,F.exp));if(F.work)r=r.filter(j=>matchWork(j,F.work));if(F.hideCit)r=r.filter(j=>!j.citizenship_required);if(F.h1bOnly)r=r.filter(j=>j.h1b_sponsor_history);if(F.hideClr)r=r.filter(j=>!j.clearance_required);if(F.q){const q=F.q.toLowerCase();r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q)||(j.skills||[]).some(s=>s.toLowerCase().includes(q)))}if(F.hideDup){const seen=new Set();r=r.filter(j=>{const k=(j.title||'').toLowerCase()+'|'+(j.company||'').toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}return r}
+function sortJobs(jobs){const s=document.getElementById('sortBy').value;return[...jobs].sort((a,b)=>{if(s==='score')return(b.opt_score||0)-(a.opt_score||0);if(s==='recent')return new Date(b.posted_date)-new Date(a.posted_date);return(a.company||'').localeCompare(b.company||'')})}
+function render(){filteredJobs=sortJobs(applyFilters());shown=Math.min(PAGE,filteredJobs.length);document.getElementById('showN').textContent=filteredJobs.length;document.getElementById('totalN').textContent=allJobs.length;const grid=document.getElementById('grid');grid.innerHTML=filteredJobs.length?filteredJobs.slice(0,shown).map(renderCard).join(''):'<div class="loading">No jobs match your filters.</div>';const btn=document.getElementById('moreBtn');if(filteredJobs.length>shown){btn.style.display='block';btn.textContent='Load More ('+(filteredJobs.length-shown)+' remaining)'}else{btn.style.display='none'}}
+function loadMore(){shown+=PAGE;document.getElementById('grid').innerHTML=filteredJobs.slice(0,shown).map(renderCard).join('');const btn=document.getElementById('moreBtn');if(filteredJobs.length>shown){btn.textContent='Load More ('+(filteredJobs.length-shown)+' remaining)'}else{btn.style.display='none'}}
+function clearAll(){F={q:'',country:'',major:'',hours:0,type:'',exp:'',work:'',hideCit:true,h1bOnly:false,hideClr:true,hideDup:false};document.getElementById('search').value='';document.getElementById('country').value='';document.getElementById('major').value='';document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.chip[data-v="0"],.chip[data-v=""]').forEach(c=>c.classList.add('on'));document.getElementById('tCit').classList.add('on');document.getElementById('tClr').classList.add('on');document.getElementById('tH1b').classList.remove('on');document.getElementById('tDup').classList.remove('on');render();closeMobile()}
+function updateStats(){document.getElementById('sJobs').textContent=allJobs.length;document.getElementById('sComp').textContent=new Set(allJobs.map(j=>j.company)).size;document.getElementById('sH1b').textContent=new Set(allJobs.filter(j=>j.h1b_sponsor_history).map(j=>j.company)).size}
+function fetchJobs(){fetch(API+'/api/jobs?page_size=15000').then(r=>r.json()).then(d=>{allJobs=d.jobs||[];updateStats();render()}).catch(e=>{document.getElementById('grid').innerHTML='<div class="loading">⚠️ Could not load jobs. Refresh the page.</div>'})}
 document.getElementById('search').addEventListener('input',e=>{F.q=e.target.value;render()});
-document.getElementById('country').addEventListener('change',e=>{F.country=e.target.value;render();closeMob()});
-document.getElementById('major').addEventListener('change',e=>{F.major=e.target.value;render();closeMob()});
-document.getElementById('sortS').addEventListener('change',()=>render());
-document.querySelectorAll('.time').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.hours=+b.dataset.h;render();closeMob()}));
-document.querySelectorAll('.work').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.work').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.work=b.dataset.w;render();closeMob()}));
-document.querySelectorAll('.jtype').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.jtype').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.jtype=b.dataset.j;render();closeMob()}));
-document.querySelectorAll('.exp').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.exp').forEach(x=>x.classList.remove('active'));b.classList.add('active');F.exp=b.dataset.e;render();closeMob()}));
+document.getElementById('country').addEventListener('change',e=>{F.country=e.target.value;render();closeMobile()});
+document.getElementById('major').addEventListener('change',e=>{F.major=e.target.value;render();closeMobile()});
+document.getElementById('sortBy').addEventListener('change',()=>render());
+document.querySelectorAll('#timeChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#timeChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.hours=parseInt(c.dataset.v)||0;render();closeMobile()}));
+document.querySelectorAll('#typeChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#typeChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.type=c.dataset.v;render();closeMobile()}));
+document.querySelectorAll('#expChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#expChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.exp=c.dataset.v;render();closeMobile()}));
+document.querySelectorAll('#workChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#workChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.work=c.dataset.v;render();closeMobile()}));
 document.getElementById('tCit').addEventListener('click',function(){this.classList.toggle('on');F.hideCit=this.classList.contains('on');render()});
-document.getElementById('tH1b').addEventListener('click',function(){this.classList.toggle('on');F.h1b=this.classList.contains('on');render()});
+document.getElementById('tH1b').addEventListener('click',function(){this.classList.toggle('on');F.h1bOnly=this.classList.contains('on');render()});
 document.getElementById('tClr').addEventListener('click',function(){this.classList.toggle('on');F.hideClr=this.classList.contains('on');render()});
 document.getElementById('tDup').addEventListener('click',function(){this.classList.toggle('on');F.hideDup=this.classList.contains('on');render()});
-fetchJobs();setInterval(fetchJobs,600000);
+fetchJobs();
 </script>
 </body>
 </html>
