@@ -3,90 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY AI AGENT | Jobs for All Majors</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <title>MY AI AGENT | Career Discovery Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👔</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:system-ui,-apple-system,sans-serif;background:#000;color:#fff;min-height:100vh}
-        header{position:fixed;top:0;left:0;right:0;height:50px;background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #222;z-index:100}
-        .logo{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px}
-        .stats{display:flex;gap:12px;font-size:0.7rem;color:#888}.stats span{color:#0f9}
-        .menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px 8px}
-        main{margin-top:50px;display:flex}
-        .sidebar{width:260px;background:#0a0a0a;padding:12px;overflow-y:auto;position:fixed;top:50px;left:0;bottom:0;z-index:50;transition:transform 0.2s}
-        .stitle{font-size:0.65rem;font-weight:600;color:#666;margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
-        .stitle:first-child{margin-top:0}
-        input[type="text"]{width:100%;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.85rem;outline:none}
-        input[type="text"]:focus{border-color:#0f9}
-        select{width:100%;padding:10px;background-color:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.85rem;outline:none;cursor:pointer}
-        select:focus{border-color:#0f9}
-        select option{background-color:#111;color:#fff;padding:8px}
-        .chips{display:flex;flex-wrap:wrap;gap:6px}
-        .chip{padding:6px 12px;background:#111;border:1px solid #333;border-radius:20px;color:#aaa;font-size:0.75rem;cursor:pointer;transition:all 0.15s}
-        .chip:hover{background:#222}
-        .chip.on{background:#0f9;color:#000;border-color:#0f9}
-        .panel{background:#111;border:1px solid #222;border-radius:8px;padding:10px;margin-top:12px}
-        .panel-title{font-weight:600;font-size:0.8rem;margin-bottom:8px}
-        .trow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:0.75rem;color:#aaa;border-bottom:1px solid #222}
-        .trow:last-child{border:none}
-        .tog{width:36px;height:20px;background:#333;border-radius:10px;position:relative;cursor:pointer;transition:0.2s}
-        .tog::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#666;border-radius:50%;transition:0.2s}
-        .tog.on{background:#0f9}
-        .tog.on::after{left:19px;background:#000}
-        .clr-btn{width:100%;padding:8px;margin-top:12px;background:transparent;border:1px solid #f59;border-radius:6px;color:#f59;font-size:0.75rem;cursor:pointer}
-        .clr-btn:hover{background:#f59;color:#000}
-        .content{flex:1;padding:14px;margin-left:260px}
-        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-        .title{font-size:1.3rem;font-weight:700}
-        .sub{color:#666;font-size:0.8rem}.sub b{color:#0f9}
-        .sort{padding:8px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.75rem}
-        .sort option{background:#111;color:#fff}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-        .card{background:#111;border:1px solid #222;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s}
-        .card:hover{border-color:#0f9;transform:translateY(-2px)}
-        .card-top{display:flex;justify-content:space-between;margin-bottom:8px}
-        .comp{display:flex;gap:10px;align-items:center}
-        .logo-box{width:38px;height:38px;background:linear-gradient(135deg,#0f9,#09f);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;color:#000}
-        .comp-name{font-weight:600;font-size:0.85rem}
-        .comp-ind{font-size:0.65rem;color:#666}
-        .score{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem}
-        .score.high{background:rgba(0,255,153,0.15);color:#0f9}
-        .score.mid{background:rgba(255,221,0,0.15);color:#fd0}
-        .score.low{background:rgba(255,100,100,0.15);color:#f66}
-        .job-title{font-size:0.95rem;font-weight:600;margin-bottom:6px;line-height:1.3}
-        .meta{display:flex;flex-wrap:wrap;gap:8px;font-size:0.7rem;color:#888;margin-bottom:8px}
-        .tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
-        .tag{padding:3px 8px;background:#1a1a1a;border-radius:4px;font-size:0.65rem;color:#aaa}
-        .tag.hl{background:rgba(0,255,153,0.1);color:#0f9}
-        .card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid #222;font-size:0.75rem}
-        .salary{color:#0f9;font-weight:600}
-        .time{color:#666}.time.new{color:#0f9}
-        .badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
-        .badge{padding:2px 6px;border-radius:3px;font-size:0.6rem;font-weight:600}
-        .badge.h1b{background:rgba(0,255,153,0.15);color:#0f9}
-        .badge.opt{background:rgba(255,221,0,0.15);color:#fd0}
-        .badge.rem{background:rgba(153,93,229,0.15);color:#95f}
-        .badge.new{background:rgba(255,100,150,0.15);color:#f59}
-        .loading{text-align:center;padding:40px;color:#666}
-        .spinner{width:30px;height:30px;border:3px solid #222;border-top-color:#0f9;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .more-btn{width:100%;padding:12px;margin-top:14px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:0.85rem;cursor:pointer}
-        .more-btn:hover{background:#0f9;color:#000;border-color:#0f9}
-        .overlay{display:none;position:fixed;inset:0;top:50px;background:rgba(0,0,0,0.8);z-index:40}
-        @media(max-width:768px){.menu-btn{display:block}.stats{display:none}.sidebar{transform:translateX(-100%);width:85%}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.content{margin-left:0;padding:10px}.grid{grid-template-columns:1fr}.title{font-size:1.1rem}}
+        :root {
+            /* Classic Rich Color Palette */
+            --royal-navy: #1a2744;
+            --deep-navy: #0f1a2e;
+            --midnight: #0a1628;
+            --burgundy: #722f37;
+            --burgundy-light: #8b3a42;
+            --gold: #c9a227;
+            --gold-light: #d4af37;
+            --gold-pale: #f4e4ba;
+            --ivory: #fffef9;
+            --cream: #f8f6f0;
+            --parchment: #f0ead6;
+            --warm-white: #fdfcfa;
+            --slate: #4a5568;
+            --charcoal: #2d3748;
+            --forest: #2d5a47;
+            --forest-light: #3d7a5f;
+            --bronze: #cd7f32;
+            --copper: #b87333;
+            --shadow: rgba(15, 26, 46, 0.12);
+            --shadow-lg: rgba(15, 26, 46, 0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--parchment) 100%);
+            color: var(--charcoal);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Elegant Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: linear-gradient(135deg, var(--royal-navy) 0%, var(--deep-navy) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 20px var(--shadow-lg);
+            z-index: 100;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(201, 162, 39, 0.3);
+        }
+
+        .logo-text {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--ivory);
+            letter-spacing: 0.5px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 24px;
+            font-size: 0.8rem;
+            color: var(--gold-pale);
+        }
+
+        .stats span {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: var(--gold);
+            color: var(--royal-navy);
+        }
+
+        /* Layout */
+        main {
+            margin-top: 64px;
+            display: flex;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* Elegant Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--warm-white);
+            border-right: 1px solid rgba(26, 39, 68, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            bottom: 0;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 20px var(--shadow);
+        }
+
+        .stitle {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--burgundy);
+            margin: 20px 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stitle:first-child {
+            margin-top: 0;
+        }
+
+        .stitle::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--burgundy) 0%, transparent 100%);
+            opacity: 0.3;
+        }
+
+        /* Form Elements */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--ivory);
+            border: 2px solid rgba(26, 39, 68, 0.15);
+            border-radius: 8px;
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--royal-navy);
+            box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--slate);
+            opacity: 0.6;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--ivory);
+            border: 2px solid rgba(26, 39, 68, 0.15);
+            border-radius: 8px;
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%231a2744' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+
+        select:focus {
+            border-color: var(--royal-navy);
+            box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.1);
+        }
+
+        select option {
+            background: var(--ivory);
+            color: var(--charcoal);
+            padding: 12px;
+        }
+
+        /* Elegant Chips */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            background: var(--ivory);
+            border: 2px solid rgba(26, 39, 68, 0.12);
+            border-radius: 25px;
+            color: var(--slate);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--royal-navy);
+            color: var(--royal-navy);
+            background: var(--cream);
+        }
+
+        .chip.on {
+            background: linear-gradient(135deg, var(--royal-navy) 0%, var(--deep-navy) 100%);
+            color: var(--gold-pale);
+            border-color: var(--royal-navy);
+            box-shadow: 0 2px 8px rgba(26, 39, 68, 0.2);
+        }
+
+        /* Visa Panel */
+        .panel {
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--cream) 100%);
+            border: 2px solid rgba(114, 47, 55, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .panel-title {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--burgundy);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 0.82rem;
+            color: var(--charcoal);
+            border-bottom: 1px solid rgba(26, 39, 68, 0.08);
+        }
+
+        .trow:last-child {
+            border: none;
+            padding-bottom: 0;
+        }
+
+        .tog {
+            width: 44px;
+            height: 24px;
+            background: rgba(26, 39, 68, 0.15);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tog::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tog.on {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%);
+        }
+
+        .tog.on::after {
+            left: 23px;
+        }
+
+        /* Clear Button */
+        .clr-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: transparent;
+            border: 2px solid var(--burgundy);
+            border-radius: 8px;
+            color: var(--burgundy);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .clr-btn:hover {
+            background: var(--burgundy);
+            color: var(--ivory);
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 24px;
+            margin-left: 300px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .title {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--royal-navy);
+        }
+
+        .sub {
+            color: var(--slate);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .sub b {
+            color: var(--burgundy);
+            font-weight: 600;
+        }
+
+        .sort {
+            padding: 10px 16px;
+            background: var(--ivory);
+            border: 2px solid rgba(26, 39, 68, 0.12);
+            border-radius: 8px;
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+
+        .sort option {
+            background: var(--ivory);
+            color: var(--charcoal);
+        }
+
+        /* Job Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        /* Elegant Job Cards */
+        .card {
+            background: var(--warm-white);
+            border: 1px solid rgba(26, 39, 68, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px var(--shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px var(--shadow-lg);
+            border-color: var(--gold);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .comp {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .logo-box {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--royal-navy) 0%, var(--deep-navy) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--gold-pale);
+            box-shadow: 0 2px 8px rgba(26, 39, 68, 0.2);
+        }
+
+        .comp-name {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--royal-navy);
+        }
+
+        .comp-ind {
+            font-size: 0.75rem;
+            color: var(--slate);
+        }
+
+        .score {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 3px solid;
+        }
+
+        .score.high {
+            background: rgba(45, 90, 71, 0.1);
+            color: var(--forest);
+            border-color: var(--forest);
+        }
+
+        .score.mid {
+            background: rgba(201, 162, 39, 0.1);
+            color: var(--bronze);
+            border-color: var(--gold);
+        }
+
+        .score.low {
+            background: rgba(114, 47, 55, 0.1);
+            color: var(--burgundy);
+            border-color: var(--burgundy);
+        }
+
+        .job-title {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--slate);
+            margin-bottom: 12px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: var(--cream);
+            border-radius: 6px;
+            font-size: 0.72rem;
+            color: var(--slate);
+            border: 1px solid rgba(26, 39, 68, 0.08);
+        }
+
+        .tag.hl {
+            background: rgba(26, 39, 68, 0.08);
+            color: var(--royal-navy);
+            font-weight: 500;
+        }
+
+        .card-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid rgba(26, 39, 68, 0.08);
+            font-size: 0.85rem;
+        }
+
+        .salary {
+            font-family: 'Crimson Pro', Georgia, serif;
+            color: var(--forest);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .time {
+            color: var(--slate);
+        }
+
+        .time.new {
+            color: var(--burgundy);
+            font-weight: 600;
+        }
+
+        .badges {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge.h1b {
+            background: rgba(45, 90, 71, 0.12);
+            color: var(--forest);
+            border: 1px solid rgba(45, 90, 71, 0.25);
+        }
+
+        .badge.opt {
+            background: rgba(201, 162, 39, 0.12);
+            color: var(--bronze);
+            border: 1px solid rgba(201, 162, 39, 0.25);
+        }
+
+        .badge.rem {
+            background: rgba(26, 39, 68, 0.08);
+            color: var(--royal-navy);
+            border: 1px solid rgba(26, 39, 68, 0.15);
+        }
+
+        .badge.new {
+            background: rgba(114, 47, 55, 0.1);
+            color: var(--burgundy);
+            border: 1px solid rgba(114, 47, 55, 0.2);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--slate);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--cream);
+            border-top-color: var(--royal-navy);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Load More Button */
+        .more-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, var(--royal-navy) 0%, var(--deep-navy) 100%);
+            border: none;
+            border-radius: 10px;
+            color: var(--gold-pale);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(26, 39, 68, 0.2);
+        }
+
+        .more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 39, 68, 0.3);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            top: 64px;
+            background: rgba(15, 26, 46, 0.6);
+            z-index: 40;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .menu-btn { display: block; }
+            .stats { display: none; }
+            .sidebar {
+                transform: translateX(-100%);
+                width: 85%;
+                max-width: 340px;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .overlay.open { display: block; }
+            .content { margin-left: 0; padding: 16px; }
+            .grid { grid-template-columns: 1fr; gap: 16px; }
+            .title { font-size: 1.5rem; }
+            header { padding: 0 16px; }
+        }
     </style>
 </head>
 <body>
 <header>
-    <div class="logo"><button class="menu-btn" onclick="toggle()">☰</button>🚀 MY AI AGENT</div>
-    <div class="stats">Companies: <span id="sComp">0</span> | H1B: <span id="sH1b">0</span> | Jobs: <span id="sJobs">0</span></div>
+    <div class="logo">
+        <button class="menu-btn" onclick="toggle()">☰</button>
+        <div class="logo-icon">👔</div>
+        <div class="logo-text">MY AI AGENT</div>
+    </div>
+    <div class="stats">
+        Companies: <span id="sComp">0</span> &nbsp;•&nbsp; 
+        H1B Sponsors: <span id="sH1b">0</span> &nbsp;•&nbsp; 
+        Total Jobs: <span id="sJobs">0</span>
+    </div>
 </header>
+
 <div class="overlay" onclick="toggle()"></div>
+
 <main>
 <aside class="sidebar" id="sidebar">
-    <div class="stitle">🔍 Search</div>
+    <div class="stitle">Search</div>
     <input type="text" id="search" placeholder="Job title, company, skill...">
-    <div class="stitle">🌍 Country</div>
+
+    <div class="stitle">Location</div>
     <select id="country">
         <option value="">All Countries</option>
         <option value="united states">🇺🇸 United States</option>
@@ -102,16 +688,17 @@
         <option value="france">🇫🇷 France</option>
         <option value="netherlands">🇳🇱 Netherlands</option>
     </select>
-    <div class="stitle">🎓 Field / Major</div>
+
+    <div class="stitle">Field of Study</div>
     <select id="major">
         <option value="">All Fields</option>
-        <option value="software">💻 Software / Development</option>
+        <option value="software">💻 Software Engineering</option>
         <option value="data">📊 Data Science / AI / ML</option>
         <option value="cybersecurity">🛡️ Cybersecurity</option>
         <option value="cloud">☁️ Cloud / DevOps</option>
         <option value="network">🌐 Networking / IT</option>
         <option value="product">📦 Product Management</option>
-        <option value="design">🎨 Design / UX / UI</option>
+        <option value="design">🎨 Design / UX</option>
         <option value="business">📈 Business / Operations</option>
         <option value="finance">💰 Finance / Accounting</option>
         <option value="marketing">📢 Marketing / Sales</option>
@@ -121,92 +708,294 @@
         <option value="engineering">⚙️ Mechanical / Electrical</option>
         <option value="support">🎧 Customer Support</option>
     </select>
-    <div class="stitle">⏰ Posted Within</div>
+
+    <div class="stitle">Posted Within</div>
     <div class="chips" id="timeChips">
-        <button class="chip on" data-v="0">All</button>
-        <button class="chip" data-v="24">24h</button>
-        <button class="chip" data-v="48">48h</button>
-        <button class="chip" data-v="168">7d</button>
-        <button class="chip" data-v="720">30d</button>
+        <button class="chip on" data-v="0">All Time</button>
+        <button class="chip" data-v="24">24 Hours</button>
+        <button class="chip" data-v="48">48 Hours</button>
+        <button class="chip" data-v="168">7 Days</button>
+        <button class="chip" data-v="720">30 Days</button>
     </div>
-    <div class="stitle">🎯 Job Type</div>
+
+    <div class="stitle">Position Type</div>
     <div class="chips" id="typeChips">
         <button class="chip on" data-v="">All</button>
         <button class="chip" data-v="intern">🎓 Internship</button>
         <button class="chip" data-v="full">💼 Full-time</button>
         <button class="chip" data-v="contract">📄 Contract</button>
     </div>
-    <div class="stitle">📊 Experience Level</div>
+
+    <div class="stitle">Experience Level</div>
     <div class="chips" id="expChips">
-        <button class="chip on" data-v="">All</button>
-        <button class="chip" data-v="entry">🌱 Entry</button>
-        <button class="chip" data-v="mid">📈 Mid</button>
-        <button class="chip" data-v="senior">⭐ Senior</button>
-        <button class="chip" data-v="lead">👑 Lead+</button>
+        <button class="chip on" data-v="">All Levels</button>
+        <button class="chip" data-v="entry">Entry Level</button>
+        <button class="chip" data-v="mid">Mid Level</button>
+        <button class="chip" data-v="senior">Senior</button>
+        <button class="chip" data-v="lead">Lead / Manager</button>
     </div>
-    <div class="stitle">💼 Work Mode</div>
+
+    <div class="stitle">Work Arrangement</div>
     <div class="chips" id="workChips">
         <button class="chip on" data-v="">All</button>
-        <button class="chip" data-v="remote">🏠 Remote</button>
-        <button class="chip" data-v="hybrid">🔄 Hybrid</button>
-        <button class="chip" data-v="onsite">🏢 Onsite</button>
+        <button class="chip" data-v="remote">Remote</button>
+        <button class="chip" data-v="hybrid">Hybrid</button>
+        <button class="chip" data-v="onsite">On-site</button>
     </div>
+
     <div class="panel">
-        <div class="panel-title">🎫 Visa Filters</div>
+        <div class="panel-title">🎫 Visa & Immigration</div>
         <div class="trow"><span>Hide Citizenship Required</span><div class="tog on" id="tCit"></div></div>
         <div class="trow"><span>H-1B Sponsors Only</span><div class="tog" id="tH1b"></div></div>
-        <div class="trow"><span>Hide Clearance Jobs</span><div class="tog on" id="tClr"></div></div>
-        <div class="trow"><span>Hide Duplicate Titles</span><div class="tog" id="tDup"></div></div>
+        <div class="trow"><span>No Security Clearance</span><div class="tog on" id="tClr"></div></div>
+        <div class="trow"><span>Hide Duplicate Listings</span><div class="tog" id="tDup"></div></div>
     </div>
-    <button class="clr-btn" onclick="clearAll()">🗑️ Clear All Filters</button>
+
+    <button class="clr-btn" onclick="clearAll()">Clear All Filters</button>
 </aside>
+
 <section class="content">
     <div class="header">
-        <div><h1 class="title">Discover Jobs</h1><p class="sub">Showing <b id="showN">0</b> of <b id="totalN">0</b> jobs</p></div>
+        <div>
+            <h1 class="title">Discover Opportunities</h1>
+            <p class="sub">Showing <b id="showN">0</b> of <b id="totalN">0</b> positions</p>
+        </div>
         <select class="sort" id="sortBy">
-            <option value="score">Sort: OPT Score</option>
-            <option value="recent">Sort: Most Recent</option>
-            <option value="company">Sort: Company A-Z</option>
+            <option value="score">Sort by: OPT Score</option>
+            <option value="recent">Sort by: Most Recent</option>
+            <option value="company">Sort by: Company</option>
         </select>
     </div>
-    <div class="grid" id="grid"><div class="loading"><div class="spinner"></div>Loading jobs...</div></div>
-    <button class="more-btn" id="moreBtn" style="display:none" onclick="loadMore()">Load More Jobs</button>
+    <div class="grid" id="grid">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading opportunities...</p>
+        </div>
+    </div>
+    <button class="more-btn" id="moreBtn" style="display:none" onclick="loadMore()">Load More Positions</button>
 </section>
 </main>
+
 <script>
-const API=location.hostname==='localhost'?'http://localhost:8000':'https://my-ai-agent-5eoe.onrender.com';
-let allJobs=[],filteredJobs=[],shown=0;const PAGE=60;
-let F={q:'',country:'',major:'',hours:0,type:'',exp:'',work:'',hideCit:true,h1bOnly:false,hideClr:true,hideDup:false};
-const CAT_KW={software:['software','developer','engineer','frontend','backend','fullstack','full stack','mobile','ios','android','java','python','javascript','react','node','golang','rust','c++','ruby','php','.net','web dev'],data:['data','analytics','machine learning','ml','ai','artificial intelligence','scientist','analyst','bi ','business intelligence','etl','sql','statistics','deep learning','nlp','big data'],cybersecurity:['security','cyber','infosec','soc ','penetration','vulnerability','threat','incident','compliance','grc','risk','firewall','encryption','identity','iam'],cloud:['cloud','aws','azure','gcp','devops','kubernetes','k8s','docker','terraform','infrastructure','sre','site reliability','platform'],network:['network','cisco','ccna','ccnp','routing','switching','vpn','tcp','lan','wan','administrator','sysadmin','system admin'],product:['product manager','product management','product owner','pm ','roadmap'],design:['design','ux','ui','user experience','user interface','product design','graphic','visual','figma','sketch','adobe','creative'],business:['business analyst','business operations','operations','project manager','program manager','scrum','agile','strategy','consultant','management consulting'],finance:['finance','accounting','financial','cpa','audit','tax','treasury','controller','investment','banking','accounts payable','accounts receivable'],marketing:['marketing','sales','growth','seo','sem','content','social media','brand','advertising','digital marketing','demand','account executive','sdr','bdr'],hr:['human resources','hr ','recruiting','recruiter','talent','people operations','hrbp','compensation','benefits'],legal:['legal','lawyer','attorney','compliance','contract','regulatory','counsel','paralegal','privacy'],healthcare:['healthcare','health','medical','clinical','biotech','pharmaceutical','life sciences','patient'],engineering:['mechanical','electrical','hardware','civil','structural','manufacturing','quality','process','industrial','cad'],support:['support','customer success','customer service','help desk','technical support','service desk','client success']};
-const EXP_KW={entry:['intern','entry','junior','jr','associate','graduate','new grad','level 1','level i',' i ','early career','0-2','1-2','fresher','trainee'],mid:['mid','intermediate',' ii','level 2','level ii',' 2 ','2-5','3-5','2+','3+','4+'],senior:['senior','sr ','sr.',' iii','level 3','level iii',' 3 ','5+','5-7','7+','experienced','specialist'],lead:['lead','principal','staff','director','head','manager','chief','vp','vice president','executive','architect',' iv','level 4']};
-function toggle(){document.getElementById('sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')}
-function closeMobile(){if(innerWidth<=768){document.getElementById('sidebar').classList.remove('open');document.querySelector('.overlay').classList.remove('open')}}
-function timeAgo(d){const h=Math.floor((Date.now()-new Date(d))/3600000);if(h<1)return'Just now';if(h<24)return h+'h ago';const days=Math.floor(h/24);if(days<30)return days+'d ago';return Math.floor(days/30)+'mo ago'}
-function renderCard(j){const hrs=(Date.now()-new Date(j.posted_date))/3600000,isNew=hrs<48,isRemote=(j.work_type||'').toLowerCase()==='remote'||(j.location||'').toLowerCase().includes('remote'),score=j.opt_score||50,scoreClass=score>=70?'high':score>=50?'mid':'low',skills=(j.skills||[]).slice(0,4);return'<article class="card" onclick="window.open(\''+j.apply_url+'\',\'_blank\')"><div class="card-top"><div class="comp"><div class="logo-box">'+(j.company||'NA').substring(0,2).toUpperCase()+'</div><div><div class="comp-name">'+(j.company||'Company')+'</div><div class="comp-ind">'+(j.industry||'Technology')+'</div></div></div><div class="score '+scoreClass+'">'+score+'</div></div><h3 class="job-title">'+(j.title||'Job Title')+'</h3><div class="meta"><span>📍 '+(j.location||'TBD').substring(0,28)+'</span><span>💼 '+(j.work_type||'Full-time')+'</span></div><div class="tags">'+skills.map((s,i)=>'<span class="tag'+(i<2?' hl':'')+'">'+s+'</span>').join('')+'</div><div class="card-foot"><span class="salary">'+(j.salary_display||'Competitive')+'</span><span class="time'+(isNew?' new':'')+'">'+(isNew?'🔥 ':'')+timeAgo(j.posted_date)+'</span></div><div class="badges">'+(j.h1b_sponsor_history?'<span class="badge h1b">H-1B</span>':'')+(score>=70?'<span class="badge opt">OPT</span>':'')+(isRemote?'<span class="badge rem">Remote</span>':'')+(isNew?'<span class="badge new">New</span>':'')+'</div></article>'}
-function matchCat(j,c){if(!c)return true;const kws=CAT_KW[c]||[],txt=((j.title||'')+' '+(j.description||'')+' '+(j.skills||[]).join(' ')).toLowerCase();return kws.some(k=>txt.includes(k))}
-function matchExp(j,e){if(!e)return true;const kws=EXP_KW[e]||[],t=(j.title||'').toLowerCase();return kws.some(k=>t.includes(k))}
-function matchType(j,t){if(!t)return true;const title=(j.title||'').toLowerCase();if(t==='intern')return title.includes('intern');if(t==='full')return!title.includes('intern')&&!title.includes('contract')&&!title.includes('part-time');if(t==='contract')return title.includes('contract');return true}
-function matchWork(j,w){if(!w)return true;const wt=(j.work_type||'').toLowerCase(),loc=(j.location||'').toLowerCase();if(w==='remote')return wt==='remote'||loc.includes('remote');if(w==='hybrid')return wt==='hybrid'||loc.includes('hybrid');if(w==='onsite')return wt==='onsite'||wt==='on-site'||(!loc.includes('remote')&&!wt.includes('remote')&&!wt.includes('hybrid'));return true}
-function matchCountry(j,c){if(!c)return true;const loc=(j.location||'').toLowerCase();if(c==='remote')return loc.includes('remote')||(j.work_type||'').toLowerCase()==='remote';return loc.includes(c.toLowerCase())}
-function applyFilters(){let r=allJobs;if(F.hours>0){const cut=Date.now()-F.hours*3600000;r=r.filter(j=>new Date(j.posted_date)>=cut)}if(F.country)r=r.filter(j=>matchCountry(j,F.country));if(F.major)r=r.filter(j=>matchCat(j,F.major));if(F.type)r=r.filter(j=>matchType(j,F.type));if(F.exp)r=r.filter(j=>matchExp(j,F.exp));if(F.work)r=r.filter(j=>matchWork(j,F.work));if(F.hideCit)r=r.filter(j=>!j.citizenship_required);if(F.h1bOnly)r=r.filter(j=>j.h1b_sponsor_history);if(F.hideClr)r=r.filter(j=>!j.clearance_required);if(F.q){const q=F.q.toLowerCase();r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q)||(j.skills||[]).some(s=>s.toLowerCase().includes(q)))}if(F.hideDup){const seen=new Set();r=r.filter(j=>{const k=(j.title||'').toLowerCase()+'|'+(j.company||'').toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}return r}
-function sortJobs(jobs){const s=document.getElementById('sortBy').value;return[...jobs].sort((a,b)=>{if(s==='score')return(b.opt_score||0)-(a.opt_score||0);if(s==='recent')return new Date(b.posted_date)-new Date(a.posted_date);return(a.company||'').localeCompare(b.company||'')})}
-function render(){filteredJobs=sortJobs(applyFilters());shown=Math.min(PAGE,filteredJobs.length);document.getElementById('showN').textContent=filteredJobs.length;document.getElementById('totalN').textContent=allJobs.length;const grid=document.getElementById('grid');grid.innerHTML=filteredJobs.length?filteredJobs.slice(0,shown).map(renderCard).join(''):'<div class="loading">No jobs match your filters.</div>';const btn=document.getElementById('moreBtn');if(filteredJobs.length>shown){btn.style.display='block';btn.textContent='Load More ('+(filteredJobs.length-shown)+' remaining)'}else{btn.style.display='none'}}
-function loadMore(){shown+=PAGE;document.getElementById('grid').innerHTML=filteredJobs.slice(0,shown).map(renderCard).join('');const btn=document.getElementById('moreBtn');if(filteredJobs.length>shown){btn.textContent='Load More ('+(filteredJobs.length-shown)+' remaining)'}else{btn.style.display='none'}}
-function clearAll(){F={q:'',country:'',major:'',hours:0,type:'',exp:'',work:'',hideCit:true,h1bOnly:false,hideClr:true,hideDup:false};document.getElementById('search').value='';document.getElementById('country').value='';document.getElementById('major').value='';document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.chip[data-v="0"],.chip[data-v=""]').forEach(c=>c.classList.add('on'));document.getElementById('tCit').classList.add('on');document.getElementById('tClr').classList.add('on');document.getElementById('tH1b').classList.remove('on');document.getElementById('tDup').classList.remove('on');render();closeMobile()}
-function updateStats(){document.getElementById('sJobs').textContent=allJobs.length;document.getElementById('sComp').textContent=new Set(allJobs.map(j=>j.company)).size;document.getElementById('sH1b').textContent=new Set(allJobs.filter(j=>j.h1b_sponsor_history).map(j=>j.company)).size}
-function fetchJobs(){fetch(API+'/api/jobs?page_size=15000').then(r=>r.json()).then(d=>{allJobs=d.jobs||[];updateStats();render()}).catch(e=>{document.getElementById('grid').innerHTML='<div class="loading">⚠️ Could not load jobs. Refresh the page.</div>'})}
-document.getElementById('search').addEventListener('input',e=>{F.q=e.target.value;render()});
-document.getElementById('country').addEventListener('change',e=>{F.country=e.target.value;render();closeMobile()});
-document.getElementById('major').addEventListener('change',e=>{F.major=e.target.value;render();closeMobile()});
-document.getElementById('sortBy').addEventListener('change',()=>render());
-document.querySelectorAll('#timeChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#timeChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.hours=parseInt(c.dataset.v)||0;render();closeMobile()}));
-document.querySelectorAll('#typeChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#typeChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.type=c.dataset.v;render();closeMobile()}));
-document.querySelectorAll('#expChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#expChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.exp=c.dataset.v;render();closeMobile()}));
-document.querySelectorAll('#workChips .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#workChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');F.work=c.dataset.v;render();closeMobile()}));
-document.getElementById('tCit').addEventListener('click',function(){this.classList.toggle('on');F.hideCit=this.classList.contains('on');render()});
-document.getElementById('tH1b').addEventListener('click',function(){this.classList.toggle('on');F.h1bOnly=this.classList.contains('on');render()});
-document.getElementById('tClr').addEventListener('click',function(){this.classList.toggle('on');F.hideClr=this.classList.contains('on');render()});
-document.getElementById('tDup').addEventListener('click',function(){this.classList.toggle('on');F.hideDup=this.classList.contains('on');render()});
+const API = location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://my-ai-agent-5eoe.onrender.com';
+let allJobs = [], filteredJobs = [], shown = 0;
+const PAGE = 48;
+let F = { q: '', country: '', major: '', hours: 0, type: '', exp: '', work: '', hideCit: true, h1bOnly: false, hideClr: true, hideDup: false };
+
+const CAT_KW = {
+    software: ['software', 'developer', 'engineer', 'frontend', 'backend', 'fullstack', 'full stack', 'mobile', 'ios', 'android', 'java', 'python', 'javascript', 'react', 'node', 'golang', 'rust', 'c++', 'ruby', 'php', '.net', 'web dev'],
+    data: ['data', 'analytics', 'machine learning', 'ml', 'ai', 'artificial intelligence', 'scientist', 'analyst', 'bi ', 'business intelligence', 'etl', 'sql', 'statistics', 'deep learning', 'nlp', 'big data'],
+    cybersecurity: ['security', 'cyber', 'infosec', 'soc ', 'penetration', 'vulnerability', 'threat', 'incident', 'compliance', 'grc', 'risk', 'firewall', 'encryption', 'identity', 'iam'],
+    cloud: ['cloud', 'aws', 'azure', 'gcp', 'devops', 'kubernetes', 'k8s', 'docker', 'terraform', 'infrastructure', 'sre', 'site reliability', 'platform'],
+    network: ['network', 'cisco', 'ccna', 'ccnp', 'routing', 'switching', 'vpn', 'tcp', 'lan', 'wan', 'administrator', 'sysadmin', 'system admin'],
+    product: ['product manager', 'product management', 'product owner', 'pm ', 'roadmap'],
+    design: ['design', 'ux', 'ui', 'user experience', 'user interface', 'product design', 'graphic', 'visual', 'figma', 'sketch', 'adobe', 'creative'],
+    business: ['business analyst', 'business operations', 'operations', 'project manager', 'program manager', 'scrum', 'agile', 'strategy', 'consultant', 'management consulting'],
+    finance: ['finance', 'accounting', 'financial', 'cpa', 'audit', 'tax', 'treasury', 'controller', 'investment', 'banking', 'accounts payable', 'accounts receivable'],
+    marketing: ['marketing', 'sales', 'growth', 'seo', 'sem', 'content', 'social media', 'brand', 'advertising', 'digital marketing', 'demand', 'account executive', 'sdr', 'bdr'],
+    hr: ['human resources', 'hr ', 'recruiting', 'recruiter', 'talent', 'people operations', 'hrbp', 'compensation', 'benefits'],
+    legal: ['legal', 'lawyer', 'attorney', 'compliance', 'contract', 'regulatory', 'counsel', 'paralegal', 'privacy'],
+    healthcare: ['healthcare', 'health', 'medical', 'clinical', 'biotech', 'pharmaceutical', 'life sciences', 'patient'],
+    engineering: ['mechanical', 'electrical', 'hardware', 'civil', 'structural', 'manufacturing', 'quality', 'process', 'industrial', 'cad'],
+    support: ['support', 'customer success', 'customer service', 'help desk', 'technical support', 'service desk', 'client success']
+};
+
+const EXP_KW = {
+    entry: ['intern', 'entry', 'junior', 'jr', 'associate', 'graduate', 'new grad', 'level 1', 'level i', ' i ', 'early career', '0-2', '1-2', 'fresher', 'trainee'],
+    mid: ['mid', 'intermediate', ' ii', 'level 2', 'level ii', ' 2 ', '2-5', '3-5', '2+', '3+', '4+'],
+    senior: ['senior', 'sr ', 'sr.', ' iii', 'level 3', 'level iii', ' 3 ', '5+', '5-7', '7+', 'experienced', 'specialist'],
+    lead: ['lead', 'principal', 'staff', 'director', 'head', 'manager', 'chief', 'vp', 'vice president', 'executive', 'architect', ' iv', 'level 4']
+};
+
+function toggle() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.querySelector('.overlay').classList.toggle('open');
+}
+
+function closeMobile() {
+    if (innerWidth <= 900) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.querySelector('.overlay').classList.remove('open');
+    }
+}
+
+function timeAgo(d) {
+    const h = Math.floor((Date.now() - new Date(d)) / 3600000);
+    if (h < 1) return 'Just now';
+    if (h < 24) return h + ' hours ago';
+    const days = Math.floor(h / 24);
+    if (days === 1) return 'Yesterday';
+    if (days < 30) return days + ' days ago';
+    return Math.floor(days / 30) + ' months ago';
+}
+
+function renderCard(j) {
+    const hrs = (Date.now() - new Date(j.posted_date)) / 3600000;
+    const isNew = hrs < 48;
+    const isRemote = (j.work_type || '').toLowerCase() === 'remote' || (j.location || '').toLowerCase().includes('remote');
+    const score = j.opt_score || 50;
+    const scoreClass = score >= 70 ? 'high' : score >= 50 ? 'mid' : 'low';
+    const skills = (j.skills || []).slice(0, 4);
+
+    return `<article class="card" onclick="window.open('${j.apply_url}', '_blank')">
+        <div class="card-top">
+            <div class="comp">
+                <div class="logo-box">${(j.company || 'NA').substring(0, 2).toUpperCase()}</div>
+                <div>
+                    <div class="comp-name">${j.company || 'Company'}</div>
+                    <div class="comp-ind">${j.industry || 'Technology'}</div>
+                </div>
+            </div>
+            <div class="score ${scoreClass}">${score}</div>
+        </div>
+        <h3 class="job-title">${j.title || 'Position'}</h3>
+        <div class="meta">
+            <span>📍 ${(j.location || 'Location TBD').substring(0, 30)}</span>
+            <span>💼 ${j.work_type || 'Full-time'}</span>
+        </div>
+        <div class="tags">${skills.map((s, i) => `<span class="tag${i < 2 ? ' hl' : ''}">${s}</span>`).join('')}</div>
+        <div class="card-foot">
+            <span class="salary">${j.salary_display || 'Competitive'}</span>
+            <span class="time${isNew ? ' new' : ''}">${isNew ? '● ' : ''}${timeAgo(j.posted_date)}</span>
+        </div>
+        <div class="badges">
+            ${j.h1b_sponsor_history ? '<span class="badge h1b">H-1B Sponsor</span>' : ''}
+            ${score >= 70 ? '<span class="badge opt">OPT Friendly</span>' : ''}
+            ${isRemote ? '<span class="badge rem">Remote</span>' : ''}
+            ${isNew ? '<span class="badge new">New</span>' : ''}
+        </div>
+    </article>`;
+}
+
+function matchCat(j, c) {
+    if (!c) return true;
+    const kws = CAT_KW[c] || [];
+    const txt = ((j.title || '') + ' ' + (j.description || '') + ' ' + (j.skills || []).join(' ')).toLowerCase();
+    return kws.some(k => txt.includes(k));
+}
+
+function matchExp(j, e) {
+    if (!e) return true;
+    const kws = EXP_KW[e] || [];
+    const t = (j.title || '').toLowerCase();
+    return kws.some(k => t.includes(k));
+}
+
+function matchType(j, t) {
+    if (!t) return true;
+    const title = (j.title || '').toLowerCase();
+    if (t === 'intern') return title.includes('intern');
+    if (t === 'full') return !title.includes('intern') && !title.includes('contract') && !title.includes('part-time');
+    if (t === 'contract') return title.includes('contract');
+    return true;
+}
+
+function matchWork(j, w) {
+    if (!w) return true;
+    const wt = (j.work_type || '').toLowerCase();
+    const loc = (j.location || '').toLowerCase();
+    if (w === 'remote') return wt === 'remote' || loc.includes('remote');
+    if (w === 'hybrid') return wt === 'hybrid' || loc.includes('hybrid');
+    if (w === 'onsite') return wt === 'onsite' || wt === 'on-site' || (!loc.includes('remote') && !wt.includes('remote') && !wt.includes('hybrid'));
+    return true;
+}
+
+function matchCountry(j, c) {
+    if (!c) return true;
+    const loc = (j.location || '').toLowerCase();
+    if (c === 'remote') return loc.includes('remote') || (j.work_type || '').toLowerCase() === 'remote';
+    return loc.includes(c.toLowerCase());
+}
+
+function applyFilters() {
+    let r = allJobs;
+    if (F.hours > 0) { const cut = Date.now() - F.hours * 3600000; r = r.filter(j => new Date(j.posted_date) >= cut); }
+    if (F.country) r = r.filter(j => matchCountry(j, F.country));
+    if (F.major) r = r.filter(j => matchCat(j, F.major));
+    if (F.type) r = r.filter(j => matchType(j, F.type));
+    if (F.exp) r = r.filter(j => matchExp(j, F.exp));
+    if (F.work) r = r.filter(j => matchWork(j, F.work));
+    if (F.hideCit) r = r.filter(j => !j.citizenship_required);
+    if (F.h1bOnly) r = r.filter(j => j.h1b_sponsor_history);
+    if (F.hideClr) r = r.filter(j => !j.clearance_required);
+    if (F.q) { const q = F.q.toLowerCase(); r = r.filter(j => (j.title || '').toLowerCase().includes(q) || (j.company || '').toLowerCase().includes(q) || (j.location || '').toLowerCase().includes(q) || (j.skills || []).some(s => s.toLowerCase().includes(q))); }
+    if (F.hideDup) { const seen = new Set(); r = r.filter(j => { const k = (j.title || '').toLowerCase() + '|' + (j.company || '').toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }); }
+    return r;
+}
+
+function sortJobs(jobs) {
+    const s = document.getElementById('sortBy').value;
+    return [...jobs].sort((a, b) => {
+        if (s === 'score') return (b.opt_score || 0) - (a.opt_score || 0);
+        if (s === 'recent') return new Date(b.posted_date) - new Date(a.posted_date);
+        return (a.company || '').localeCompare(b.company || '');
+    });
+}
+
+function render() {
+    filteredJobs = sortJobs(applyFilters());
+    shown = Math.min(PAGE, filteredJobs.length);
+    document.getElementById('showN').textContent = filteredJobs.length;
+    document.getElementById('totalN').textContent = allJobs.length;
+    const grid = document.getElementById('grid');
+    grid.innerHTML = filteredJobs.length ? filteredJobs.slice(0, shown).map(renderCard).join('') : '<div class="loading"><p>No positions match your criteria. Try adjusting your filters.</p></div>';
+    const btn = document.getElementById('moreBtn');
+    if (filteredJobs.length > shown) { btn.style.display = 'block'; btn.textContent = 'Load More (' + (filteredJobs.length - shown) + ' remaining)'; } 
+    else { btn.style.display = 'none'; }
+}
+
+function loadMore() {
+    shown += PAGE;
+    document.getElementById('grid').innerHTML = filteredJobs.slice(0, shown).map(renderCard).join('');
+    const btn = document.getElementById('moreBtn');
+    if (filteredJobs.length > shown) { btn.textContent = 'Load More (' + (filteredJobs.length - shown) + ' remaining)'; } 
+    else { btn.style.display = 'none'; }
+}
+
+function clearAll() {
+    F = { q: '', country: '', major: '', hours: 0, type: '', exp: '', work: '', hideCit: true, h1bOnly: false, hideClr: true, hideDup: false };
+    document.getElementById('search').value = '';
+    document.getElementById('country').value = '';
+    document.getElementById('major').value = '';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    document.querySelectorAll('.chip[data-v="0"], .chip[data-v=""]').forEach(c => c.classList.add('on'));
+    document.getElementById('tCit').classList.add('on');
+    document.getElementById('tClr').classList.add('on');
+    document.getElementById('tH1b').classList.remove('on');
+    document.getElementById('tDup').classList.remove('on');
+    render();
+    closeMobile();
+}
+
+function updateStats() {
+    document.getElementById('sJobs').textContent = allJobs.length;
+    document.getElementById('sComp').textContent = new Set(allJobs.map(j => j.company)).size;
+    document.getElementById('sH1b').textContent = new Set(allJobs.filter(j => j.h1b_sponsor_history).map(j => j.company)).size;
+}
+
+function fetchJobs() {
+    fetch(API + '/api/jobs?page_size=15000')
+        .then(r => r.json())
+        .then(d => { allJobs = d.jobs || []; updateStats(); render(); })
+        .catch(e => { document.getElementById('grid').innerHTML = '<div class="loading"><p>Unable to load positions. Please refresh the page.</p></div>'; });
+}
+
+// Event Listeners
+document.getElementById('search').addEventListener('input', e => { F.q = e.target.value; render(); });
+document.getElementById('country').addEventListener('change', e => { F.country = e.target.value; render(); closeMobile(); });
+document.getElementById('major').addEventListener('change', e => { F.major = e.target.value; render(); closeMobile(); });
+document.getElementById('sortBy').addEventListener('change', () => render());
+
+document.querySelectorAll('#timeChips .chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('#timeChips .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); F.hours = parseInt(c.dataset.v) || 0; render(); closeMobile(); }));
+document.querySelectorAll('#typeChips .chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('#typeChips .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); F.type = c.dataset.v; render(); closeMobile(); }));
+document.querySelectorAll('#expChips .chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('#expChips .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); F.exp = c.dataset.v; render(); closeMobile(); }));
+document.querySelectorAll('#workChips .chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('#workChips .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); F.work = c.dataset.v; render(); closeMobile(); }));
+
+document.getElementById('tCit').addEventListener('click', function() { this.classList.toggle('on'); F.hideCit = this.classList.contains('on'); render(); });
+document.getElementById('tH1b').addEventListener('click', function() { this.classList.toggle('on'); F.h1bOnly = this.classList.contains('on'); render(); });
+document.getElementById('tClr').addEventListener('click', function() { this.classList.toggle('on'); F.hideClr = this.classList.contains('on'); render(); });
+document.getElementById('tDup').addEventListener('click', function() { this.classList.toggle('on'); F.hideDup = this.classList.contains('on'); render(); });
+
 fetchJobs();
 </script>
 </body>
