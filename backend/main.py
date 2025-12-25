@@ -17,9 +17,8 @@ app.add_middleware(
 def load_jobs():
     paths = [
         "../collectors/collected_jobs.json",
-        "collectors/collected_jobs.json",
-        "collected_jobs.json",
-        "/opt/render/project/src/collectors/collected_jobs.json"
+        "collectors/collected_jobs.json", 
+        "collected_jobs.json"
     ]
     for path in paths:
         if os.path.exists(path):
@@ -30,13 +29,9 @@ def load_jobs():
                     print(f"SUCCESS: Loaded {len(jobs)} jobs from {path}")
                     return jobs
             except Exception as e:
-                print(f"Error reading {path}: {e}")
-    print("WARNING: No jobs file found, using sample data")
-    return [
-        {"id": "1", "title": "Security Engineer", "company": "Microsoft", "company_id": "microsoft", "industry": "Technology", "location": "Redmond, WA", "work_type": "hybrid", "skills": ["Azure", "Python"], "categories": ["cybersecurity", "cloud"], "apply_url": "https://careers.microsoft.com", "posted_date": datetime.now().isoformat(), "opt_score": 90, "h1b_sponsor_history": True, "citizenship_required": False, "clearance_required": False, "salary_display": "$130K-$180K"},
-        {"id": "2", "title": "Cloud Analyst", "company": "Google", "company_id": "google", "industry": "Technology", "location": "Mountain View, CA", "work_type": "remote", "skills": ["GCP", "SIEM"], "categories": ["cybersecurity", "cloud"], "apply_url": "https://careers.google.com", "posted_date": datetime.now().isoformat(), "opt_score": 85, "h1b_sponsor_history": True, "citizenship_required": False, "clearance_required": False, "salary_display": "$140K-$190K"},
-        {"id": "3", "title": "Network Engineer", "company": "Cisco", "company_id": "cisco", "industry": "Networking", "location": "San Jose, CA", "work_type": "hybrid", "skills": ["CCNA", "Firewall"], "categories": ["networking"], "apply_url": "https://jobs.cisco.com", "posted_date": datetime.now().isoformat(), "opt_score": 80, "h1b_sponsor_history": True, "citizenship_required": False, "clearance_required": False, "salary_display": "$110K-$150K"}
-    ]
+                print(f"Error: {e}")
+    print("No jobs file found")
+    return []
 
 all_jobs = load_jobs()
 
@@ -68,3 +63,22 @@ def get_stats():
 @app.get("/api/companies")
 def get_companies():
     return {"companies": [], "total": len(set(j.get("company") for j in all_jobs))}
+```
+
+5. Click **"Commit changes"**
+
+---
+
+### Step 2: Wait for Render to Redeploy
+
+Render will automatically detect the change and redeploy (2-3 minutes).
+
+Or go to [render.com](https://render.com) → Your service → **"Manual Deploy"** → **"Deploy latest commit"**
+
+---
+
+### Step 3: Check Render Logs
+
+After deployment, check the Render logs. You should see:
+```
+SUCCESS: Loaded 4177 jobs from ../collectors/collected_jobs.json
