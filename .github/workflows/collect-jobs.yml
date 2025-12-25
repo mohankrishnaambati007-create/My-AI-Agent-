@@ -1,0 +1,37 @@
+name: Daily Job Collection
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  collect-jobs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx
+      
+      - name: Run job collector
+        run: |
+          cd collectors
+          python live_collector.py
+      
+      - name: Commit and push updated jobs
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add collectors/collected_jobs.json
+          git diff --staged --quiet || git commit -m "Update jobs - $(date +'%Y-%m-%d')"
+          git push
